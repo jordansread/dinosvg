@@ -41,8 +41,8 @@ add_boxwhisk <- function(g_id, y_stats, y_data, x_val, box_id, axes, fig, boxes 
     } else {
       stroke = 'none'
     }
-    style_circle <-  sprintf('fill:%s;stroke:%s;fill-opacity:%s;stroke-width:%s',
-                             cir_fill, stroke,  cir_opc, cir_lw)
+    style_circle <-  sprintf('fill:%s;stroke:%s;stroke-width:%s',
+                             cir_fill, stroke, cir_lw)
     
     circle(g_id,x_px[3],cy, style_circle, id = 'fake_id')
           

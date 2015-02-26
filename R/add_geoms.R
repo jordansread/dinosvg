@@ -14,9 +14,10 @@ circle <- function(parent, x, y, style, id){
              attrs = c('id' = id,
                        'cx' = x, 'cy' = y, 'r' = "4",
                        'style' = style,
+                       'fill-opacity' = 0.3,
                        onmouseover = "MakeOpaque(evt)",
                        onmousemove = mouse_move_txt,
-                       onmouseout = "HideTooltip(evt);evt.target.setAttribute('fill-opacity', '0.1')"))
+                       onmouseout = "HideTooltip(evt);evt.target.setAttribute('fill-opacity', '0.3')"))
 }
 rect <- function(parent, x, y, h, w, style, id){
   x = sprintf('%1.1f',x)

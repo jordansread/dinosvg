@@ -1,4 +1,4 @@
-#'@importFrom XML saveXML
+#'@importFrom XML saveXML newXMLNode
 #'@export
 sandbar_box <- function(){
   trips = list("1980-01-03" = rnorm(12,mean=400,sd=200),
