@@ -1,4 +1,4 @@
-#'@importFrom XML xmlParse
+#'@importFrom XML xmlParse xmlRoot
 #'@export
 svg_init <- function(fig, def_opacity){
   doc <- xmlParse(paste0('<?xml version="1.0" encoding="UTF-8"?>
