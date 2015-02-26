@@ -13,7 +13,7 @@ add_boxwhisk <- function(g_id, y_stats, y_data, x_val, box_id, axes, fig, boxes 
                        box_fill, stroke, box_opc, box_lw)
   style_line <- sprintf('stroke:%s;stroke-width:%s',
                         stroke, box_lw)
-  
+  style_dash <- paste0(style_line,';stroke-dasharray:8,4')
   px_width = tran_x(axes$x_lim[1]+boxes$width, axes, fig) - tran_x(axes$x_lim[1], axes, fig) # make sure it is within the box, otherwise it gets a inf
   wk_width = px_width*boxes$rat_whisker
   
@@ -27,10 +27,10 @@ add_boxwhisk <- function(g_id, y_stats, y_data, x_val, box_id, axes, fig, boxes 
   px_height = y_px[2] - y_px[4]
   
   rect(parent = g_id, x_px[1], y_px[4], px_height, px_width, style_box, box_id)
-  line(g_id, c(x_px[3],x_px[3]), c(y_px[4],y_px[5]), style_line) 
+  line(g_id, c(x_px[3],x_px[3]), c(y_px[4],y_px[5]), style_dash) 
   line(g_id, c(x_px[2],x_px[4]), c(y_px[5],y_px[5]), style_line) 
   line(g_id, c(x_px[2],x_px[4]), c(y_px[1],y_px[1]), style_line)
-  line(g_id, c(x_px[3],x_px[3]), c(y_px[2],y_px[1]), style_line) 
+  line(g_id, c(x_px[3],x_px[3]), c(y_px[2],y_px[1]), style_dash) 
   
   for (i in 1:length(y_data)){
     value <- y_data[i]
