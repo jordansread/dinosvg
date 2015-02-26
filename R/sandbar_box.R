@@ -62,8 +62,6 @@ sandbar_box <- function(){
                              visibility="hidden"))
   
   root_nd <- xmlRoot(g_id)
-  
-  doc <- addChildren(root_nd,c(g_id))#, dt
-  
-  saveXML(doc, file = './sandbar_boxplot.svg')
+
+  saveXML(root_nd, file = './sandbar_boxplot.svg')
 }

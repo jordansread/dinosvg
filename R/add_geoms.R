@@ -1,4 +1,4 @@
-#'@importFrom XML newXMLNode
+#'@importFrom XML newXMLNode newXMLTextNode
 line <- function(parent, x,y,style){
   x = sprintf('%1.1f',x)
   y = sprintf('%1.1f',y)
@@ -27,4 +27,12 @@ rect <- function(parent, x, y, h, w, style, id){
              attrs = c('id' = id, 
                        x = x, y = y, width = w, height = h,
                        'style' = style))
+}
+
+txt <- function(parent, text, x, y, rotate = 0, anchor){
+  x = sprintf('%1.1f',x)
+  y = sprintf('%1.1f',y)
+  newXMLNode("text", newXMLTextNode(text), 'parent' = parent,
+             attrs = c('transform'=sprintf("translate(%s,%s)rotate(%s)",x, y, rotate),
+                       'text-anchor'=anchor))
 }
