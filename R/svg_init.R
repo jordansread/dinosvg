@@ -34,6 +34,7 @@ svg_init <- function(fig, def_opacity){
 }
                          
                          tooltip = svgDocument.getElementById("tooltip");
+                         tooltip_bg = svgDocument.getElementById("tooltip_bg");
 }
                          
                          function ShowTooltip(evt, mouseovertext)
@@ -42,15 +43,22 @@ svg_init <- function(fig, def_opacity){
                          tooltip.setAttributeNS(null,"y",evt.clientY+4);
                          tooltip.firstChild.data = mouseovertext;
                          tooltip.setAttributeNS(null,"visibility","visible");
+                         length = tooltip.getComputedTextLength();
+                         tooltip_bg.setAttributeNS(null,"width",length+16);
+                         tooltip_bg.setAttributeNS(null,"y",evt.clientY-16);
+                         tooltip_bg.setAttributeNS(null,"x",evt.clientX+1);
+                         tooltip_bg.setAttributeNS(null,"visibility","visible");
 }
                          
                          function HideTooltip(evt)
 {
                          tooltip.setAttributeNS(null,"visibility","hidden");
+                         tooltip_bg.setAttributeNS(null,"visibility","hidden");
                          tooltip.setAttributeNS(null,"transition","1s");
+                         tooltip_bg.setAttributeNS(null,"transition","1s");
 }   
                          function MakeTransparent(evt) {
-                         evt.target.setAttributeNS(null,"fill-opacity","', def_opacity,'");
+                         evt.target.setAttributeNS(null,"fill-opacity","0.5");
                          evt.target.setAttributeNS(null,"transition","1s");
                          }
                          

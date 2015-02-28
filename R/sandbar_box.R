@@ -20,7 +20,7 @@ sandbar_box <- function(){
   dev.off()
   # --- pixel dims ---
   axes <- list('tick_len' = 5,
-               'y_label' = "Eddy volume (cubic meters)",
+               'y_label' = "Sand Volume in Eddy (m^3)",
                'y_ticks' = y_ticks,
                'y_tk_label' = y_ticks,
                'x_ticks' = seq_len(length(trips)),
@@ -56,6 +56,11 @@ sandbar_box <- function(){
   add_usgs(g_id,
            base_x = fig$w-fig$margins[2]-fig$margins[4],
            base_y = fig$h-fig$margins[1]-fig$margins[3])
+  
+  newXMLNode("rect", parent = g_id, newXMLTextNode('Tooltip'),
+             attrs = c(class="label", id="tooltip_bg", x="0", y="0", rx="4", ry="4", 
+                       width="55", height="28", style="fill:#f6f6f6;fill-opacity:0.85;stroke:#696969;",
+                       visibility="hidden"))
   
   newXMLNode("text", parent = g_id, newXMLTextNode('Tooltip'),
                    attrs = c(class="label", id="tooltip", x="0", y="0", 
