@@ -6,10 +6,10 @@ line <- function(parent, x,y,style){
              attrs = c(x1 = x[1], y1 = y[1], x2 = x[2], y2 = y[2],
                        'style' = style))
 }
-circle <- function(parent, x, y, style, id, r = 4){
+circle <- function(parent, x, y, style, id, r = 4, tip_name = '_fake_name_'){
   x = sprintf('%1.1f',x)
   y = sprintf('%1.1f',y)
-  mouse_move_txt <- sprintf("ShowTooltip(evt, '%s')",'_fake_name_')
+  mouse_move_txt <- sprintf("ShowTooltip(evt, '%s')",tip_name)
   newXMLNode("circle", 'parent' = parent,
              attrs = c('id' = id,
                        'cx' = x, 'cy' = y, 'r' = r,

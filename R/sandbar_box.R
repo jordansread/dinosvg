@@ -1,16 +1,16 @@
 #'@importFrom XML saveXML newXMLNode
 #'@export
 sandbar_box <- function(){
-  trips = list("1980-01-03" = rnorm(12,mean=400,sd=200),
-               "1989-05-01" = rnorm(12,mean=452,sd=122),
-               "1994-06-15" = rnorm(25,mean=700,sd=162),
-               "1999-05-01" = rnorm(12,mean=452,sd=122),
-               "2001-06-15" = rnorm(12,mean=452,sd=222),
-               "2002-05-01" = rnorm(12,mean=452,sd=122),
-               "2004-06-15" = rnorm(25,mean=700,sd=162),
-               "2005-05-01" = rnorm(12,mean=452,sd=122),
-               "2009-06-15" = rnorm(12,mean=452,sd=222),
-               "2012-06-14" = rnorm(11,mean=952,sd=256))
+  trips = list("Feb-1980" = rnorm(12,mean=400,sd=200),
+               "Apr-1989" = rnorm(12,mean=452,sd=122),
+               "Jun-1994" = rnorm(25,mean=700,sd=162),
+               "May-1999" = rnorm(12,mean=452,sd=122),
+               "Jun-2001" = rnorm(12,mean=452,sd=222),
+               "Apr-2002" = rnorm(12,mean=452,sd=122),
+               "Jun-2004" = rnorm(25,mean=700,sd=162),
+               "May-2005" = rnorm(12,mean=452,sd=122),
+               "Jun-2009" = rnorm(12,mean=452,sd=222),
+               "Jul-2012" = rnorm(11,mean=952,sd=256))
   
   
   bp <- boxplot(trips, las = 2, ylab = 'Variable (?/L)', plot = T)

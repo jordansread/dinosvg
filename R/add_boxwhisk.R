@@ -1,6 +1,7 @@
 #'@export
 add_boxwhisk <- function(g_id, y_stats, y_data, x_val, box_id, axes, fig, boxes ){
   
+  sites <- c('Cathedral Wash', 'Jackass Camp', '9-Mile')
   box_fill = "#40DFD0"
   stroke = "black"
   box_opc = 0.3
@@ -48,7 +49,7 @@ add_boxwhisk <- function(g_id, y_stats, y_data, x_val, box_id, axes, fig, boxes 
     style_circle <-  sprintf('fill:%s;stroke:%s;stroke-width:%s',
                              cir_fill, stroke, cir_lw)
     
-    circle(g_id,x_px[3],cy, style_circle, id = 'fake_id', r = r)
+    circle(g_id,x_px[3],cy, style_circle, id = 'fake_id', r = r, tip_name = sample(sites, 1))
           
   }
 
