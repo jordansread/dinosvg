@@ -59,7 +59,7 @@ sandbar_box <- function(){
   
   newXMLNode("rect", parent = g_id, newXMLTextNode('Tooltip'),
              attrs = c(class="label", id="tooltip_bg", x="0", y="0", rx="4", ry="4", 
-                       width="55", height="28", style="fill:#f6f6f6;fill-opacity:0.85;stroke:#696969;",
+                       width="55", height="28", style="fill:#f6f6f6;fill-opacity:0.85;stroke:#696969;stroke-width:0.5;",
                        visibility="hidden"))
   
   newXMLNode("text", parent = g_id, newXMLTextNode('Tooltip'),
