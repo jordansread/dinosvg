@@ -28,9 +28,9 @@ sandbar_box <- function(){
                'y_lim' = y_lim,
                'x_lim' = x_lim)
   
-  fig <- list('w' = 650,
+  fig <- list('w' = 700,
               'h' = 450,
-              'margins' = c(100,80,10, 10)) #bot, left, top, right
+              'margins' = c(100,80,10, 60)) #bot, left, top, right
   
   fig$px_lim <- list("x" = c(fig$margins[2], fig$w-fig$margins[2]-fig$margins[4]),
                      "y" = c(fig$h-fig$margins[3]-fig$margins[1], fig$margins[3]))

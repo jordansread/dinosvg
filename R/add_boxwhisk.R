@@ -2,12 +2,12 @@
 add_boxwhisk <- function(g_id, y_stats, y_data, x_val, box_id, axes, fig, boxes ){
   
   sites <- c('Cathedral Wash', 'Jackass Camp', '9-Mile')
-  box_fill = "#40DFD0"
+  box_fill = "#94E1F2"
   stroke = "black"
-  box_opc = 0.3
+  box_opc = 0.7
   cir_opc = 0.3
   box_lw = 1.5
-  cir_lw = 1
+  cir_lw = 1.5
   cir_fill = "black"
   
   style_box <- sprintf('fill:%s;stroke:%s;fill-opacity:%s;stroke-width:%s',
@@ -41,15 +41,17 @@ add_boxwhisk <- function(g_id, y_stats, y_data, x_val, box_id, axes, fig, boxes 
     
     if (value < y_stats[1] | value > y_stats[5]){
       stroke = 'black'
+      fill = 'white'
       r = 4
     } else {
       stroke = 'none'
       r = 2.3
+      fill <- cir_fill
     }
     style_circle <-  sprintf('fill:%s;stroke:%s;stroke-width:%s',
-                             cir_fill, stroke, cir_lw)
-    
-    circle(g_id,x_px[3],cy, style_circle, id = 'fake_id', r = r, tip_name = sample(sites, 1))
+                             fill, stroke, cir_lw)
+    data_txt <- sprintf(" (%1.1f m^3)", y_data[i])
+    circle(g_id,x_px[3],cy, style_circle, id = 'fake_id', r = r, tip_name = paste0(sample(sites, 1), data_txt))
           
   }
 
