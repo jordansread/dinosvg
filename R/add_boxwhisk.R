@@ -1,7 +1,6 @@
 #'@export
-add_boxwhisk <- function(g_id, y_stats, y_data, x_val, box_id, axes, fig, boxes ){
+add_boxwhisk <- function(g_id, y_stats, y_data, x_val, box_id, axes, fig, boxes, sites){
   
-  sites <- c('Cathedral Wash', 'Jackass Camp', '9-Mile')
   box_fill = "#94E1F2"
   stroke = "black"
   box_opc = 0.7
@@ -36,23 +35,28 @@ add_boxwhisk <- function(g_id, y_stats, y_data, x_val, box_id, axes, fig, boxes 
   line(g_id, c(x_px[3],x_px[3]), c(y_px[2],y_px[1]), style_dash) 
   
   for (i in 1:length(y_data)){
-    value <- y_data[i]
-    cy = tran_y(val = value, axes, fig)
-    
-    if (value < y_stats[1] | value > y_stats[5]){
-      stroke = 'black'
-      fill = 'white'
-      r = 4
+    if (!is.na(y_data[i])){
+      value <- y_data[i]
+      cy = tran_y(val = value, axes, fig)
+      
+      if (value < y_stats[1] | value > y_stats[5]){
+        stroke = 'black'
+        fill = 'white'
+        r = 4
+      } else {
+        stroke = 'none'
+        r = 2.3
+        fill <- cir_fill
+      }
+      style_circle <-  sprintf('fill:%s;stroke:%s;stroke-width:%s',
+                               fill, stroke, cir_lw)
+      data_txt <- sprintf(" (%1.1f mg/L)", y_data[i])
+      circle(g_id,x_px[3],cy, style_circle, id = 'fake_id', r = r, tip_name = paste0(sites[i], data_txt))
+      
     } else {
-      stroke = 'none'
-      r = 2.3
-      fill <- cir_fill
+      # skip/dontplot
     }
-    style_circle <-  sprintf('fill:%s;stroke:%s;stroke-width:%s',
-                             fill, stroke, cir_lw)
-    data_txt <- sprintf(" (%1.1f m^3)", y_data[i])
-    circle(g_id,x_px[3],cy, style_circle, id = 'fake_id', r = r, tip_name = paste0(sample(sites, 1), data_txt))
-          
+    
   }
 
 }
