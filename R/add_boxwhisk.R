@@ -1,7 +1,6 @@
 #'@export
-add_boxwhisk <- function(g_id, y_stats, y_data, x_val, box_id, axes, fig, boxes, sites){
+add_boxwhisk <- function(g_id, y_stats, y_data, x_val, box_id, axes, fig, boxes, sites, box_fill= "#94E1F2"){
   
-  box_fill = "#94E1F2"
   stroke = "black"
   box_opc = 0.7
   cir_opc = 0.3
@@ -50,7 +49,7 @@ add_boxwhisk <- function(g_id, y_stats, y_data, x_val, box_id, axes, fig, boxes,
       }
       style_circle <-  sprintf('fill:%s;stroke:%s;stroke-width:%s',
                                fill, stroke, cir_lw)
-      data_txt <- sprintf(" (%1.1f mg/L)", y_data[i])
+      data_txt <- sprintf(" (%1.1f)", y_data[i]) #
       circle(g_id,x_px[3],cy, style_circle, id = 'fake_id', r = r, tip_name = paste0(sites[i], data_txt))
       
     } else {

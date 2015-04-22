@@ -1,17 +1,23 @@
 #'@title add axes and ticks to an svg document. 
 #'@details transformation from plot space to pixel space is handled here. 
 #'@export
-add_axes <- function(g_id, axes, fig){
+add_axes <- function(g_id, axes, fig, y_rotate = 270){
   
   y_bump <- c(x=-5, y = 5)
   x_bump <- c(x=0, y = 5) #tick label bumps
   x_ax_bump <- (max(nchar(axes$y_ticks))+1)*10 #axis label bump (should be based on nchar of axis labels?)
+  y_ax_bump <- (max(nchar(axes$x_ticks))+2)*10 #axis label bump (should be based on nchar of axis labels?)
   axis_style <- "fill:#FFFFFF;stroke:black"
   
   
   rect(g_id, fig$margins[2], fig$margins[3], diff(-fig$px_lim$y), diff(fig$px_lim$x), axis_style, id = "axis.box")
   y_ax_cent <- mean(c(fig$margins[3], fig$h-fig$margins[3]-fig$margins[1]))
-  txt(g_id, text=axes$y_label, fig$margins[2]-x_ax_bump, y_ax_cent, rotate = 270, "middle")
+  x_ax_cent <- mean(c(fig$margins[2], fig$w-fig$margins[4]-fig$margins[2]))
+  txt(g_id, text=axes$y_label, fig$margins[2]-x_ax_bump, y_ax_cent, rotate = y_rotate, "middle")
+  if (!is.null(axes$x_label)){
+    txt(g_id, text=axes$x_label, x_ax_cent, fig$h-fig$margins[1]-fig$margins[3]+y_ax_bump, rotate = 0, "middle")
+  }
+
   
   y1 = fig$h-fig$margins[1]-fig$margins[3]
   for (i in 1:length(axes$x_ticks)){

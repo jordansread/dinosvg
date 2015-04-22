@@ -31,6 +31,7 @@ svg_init <- function(fig, def_opacity){
                          if ( window.svgDocument == null )
 {
                          svgDocument = evt.target.ownerDocument;
+                         svgDocument.timeAdvance = this.timeAdvance;
 }
                          
                          tooltip = svgDocument.getElementById("tooltip");
@@ -66,7 +67,10 @@ svg_init <- function(fig, def_opacity){
                          evt.target.setAttributeNS(null,"fill-opacity","1");
                          evt.target.setAttributeNS(null,"transition","1s");
                          }
-                         
+                         function timeAdvance(){
+  							          var ele = document.getElementById("timeAdvance");
+								          ele.beginElement();
+							           }
                          ]]>
                          </script></svg>'))
   
