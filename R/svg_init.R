@@ -37,7 +37,11 @@ svg_init <- function(fig, def_opacity){
                          tooltip = svgDocument.getElementById("tooltip");
                          tooltip_bg = svgDocument.getElementById("tooltip_bg");
 }
-                         
+                         function ChangeText(evt, elementname, legendtext)
+{
+                         textelement = svgDocument.getElementById(elementname);                      
+                         textelement.firstChild.data = legendtext;
+} 
                          function ShowTooltip(evt, mouseovertext)
 {
                          tooltip.setAttributeNS(null,"x",evt.clientX+8);

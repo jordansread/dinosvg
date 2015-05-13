@@ -15,9 +15,9 @@ circle <- function(parent, x, y, style, id, r = 4, tip_name = '_fake_name_'){
                        'cx' = x, 'cy' = y, 'r' = r,
                        'style' = style,
                        'fill-opacity' = 0.7,
-                       onmouseover = "evt.target.setAttribute('r', '5');",
-                       onmousemove = mouse_move_txt,
-                       onmouseout = sprintf("HideTooltip(evt);evt.target.setAttribute('r', '%s');",r)))
+                       onmouseover = "evt.target.setAttribute('r', '5');"))
+                       #onmousemove = mouse_move_txt,
+                       #onmouseout = sprintf("HideTooltip(evt);evt.target.setAttribute('r', '%s');",r)))
   invisible(node)
 }
 rect <- function(parent, x, y, h, w, style, id){
