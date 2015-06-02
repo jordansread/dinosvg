@@ -6,18 +6,13 @@ line <- function(parent, x,y,style){
              attrs = c(x1 = x[1], y1 = y[1], x2 = x[2], y2 = y[2],
                        'style' = style))
 }
-circle <- function(parent, x, y, style, id, r = 4, tip_name = '_fake_name_'){
+circle <- function(parent, x, y, ...){
   x = sprintf('%1.1f',x)
   y = sprintf('%1.1f',y)
-  mouse_move_txt <- sprintf("ShowTooltip(evt, '%s')",tip_name)
+  
+  args <- expand.grid(..., stringsAsFactors = F)
   node <- newXMLNode("circle", 'parent' = parent,
-             attrs = c('id' = id,
-                       'cx' = x, 'cy' = y, 'r' = r,
-                       'style' = style,
-                       'fill-opacity' = 0.7,
-                       onmouseover = "evt.target.setAttribute('r', '5');"))
-                       #onmousemove = mouse_move_txt,
-                       #onmouseout = sprintf("HideTooltip(evt);evt.target.setAttribute('r', '%s');",r)))
+             attrs = c('cx' = x, 'cy' = y, args))
   invisible(node)
 }
 rect <- function(parent, x, y, h, w, style, id){
@@ -39,18 +34,21 @@ txt <- function(parent, text, x, y, rotate = 0, anchor){
                        'text-anchor'=anchor))
 }
 
-linepath <- function(parent, x,y, style, id){
+linepath <- function(parent, x,y, ...){
+  args <- expand.grid(..., stringsAsFactors = F)
+  
   x = sprintf('%1.1f',x)
   y = sprintf('%1.1f',y)
   path = ''
   # make this better later...
   for (i in 1:length(x)){
-    path <- paste0(path, ifelse(i==1,"M","L"), x[i],',',y[i], " ")
+    if (!is.na(y[i]) & !is.na(x[i])){
+      path <- paste0(path, ifelse(i==1,"M","L"), x[i],',',y[i], " ")
+    }
+    
   }
   
   node <- newXMLNode("path", 'parent' = parent,
-             attrs = c('id' = id, 
-                       d = path, 'fill'="none",
-                       'style' = style))
+             attrs = c(d = path, args))
   invisible(node)
 }

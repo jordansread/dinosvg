@@ -34,43 +34,36 @@ svg_init <- function(fig, def_opacity){
                          svgDocument.timeAdvance = this.timeAdvance;
 }
                          
-                         tooltip = svgDocument.getElementById("tooltip");
-                         tooltip_bg = svgDocument.getElementById("tooltip_bg");
+                         legend = svgDocument.getElementById("legend");
 }
+                         function legendViz(evt,elementname)
+                         {
+                          var r = document.getElementById(elementname).r.animVal.value
+
+                          if (r === 0){
+                            legend.setAttributeNS(null,"visibility","hidden");
+                          } else {
+                            legend.setAttributeNS(null,"visibility","visible");
+                          }
+
+}
+                         function highlightViz(evt,elementname,opacity)
+{
+                          var r = document.getElementById(elementname).r.animVal.value
+  
+                          if (r === 0){
+                            evt.target.setAttribute("fill-opacity", "0.0");
+                          } else {
+                            evt.target.setAttribute("fill-opacity", opacity);
+                          }
+                            
+}
+
                          function ChangeText(evt, elementname, legendtext)
 {
                          textelement = svgDocument.getElementById(elementname);                      
                          textelement.firstChild.data = legendtext;
 } 
-                         function ShowTooltip(evt, mouseovertext)
-{
-                         tooltip.setAttributeNS(null,"x",evt.clientX+8);
-                         tooltip.setAttributeNS(null,"y",evt.clientY+4);
-                         tooltip.firstChild.data = mouseovertext;
-                         tooltip.setAttributeNS(null,"visibility","visible");
-                         length = tooltip.getComputedTextLength();
-                         tooltip_bg.setAttributeNS(null,"width",length+16);
-                         tooltip_bg.setAttributeNS(null,"y",evt.clientY-16);
-                         tooltip_bg.setAttributeNS(null,"x",evt.clientX+1);
-                         tooltip_bg.setAttributeNS(null,"visibility","visible");
-}
-                         
-                         function HideTooltip(evt)
-{
-                         tooltip.setAttributeNS(null,"visibility","hidden");
-                         tooltip_bg.setAttributeNS(null,"visibility","hidden");
-                         tooltip.setAttributeNS(null,"transition","1s");
-                         tooltip_bg.setAttributeNS(null,"transition","1s");
-}   
-                         function MakeTransparent(evt) {
-                         evt.target.setAttributeNS(null,"fill-opacity","0.5");
-                         evt.target.setAttributeNS(null,"transition","1s");
-                         }
-                         
-                         function MakeOpaque(evt) {
-                         evt.target.setAttributeNS(null,"fill-opacity","1");
-                         evt.target.setAttributeNS(null,"transition","1s");
-                         }
                          function timeAdvance(){
   							          var ele = document.getElementById("timeAdvance");
 								          ele.beginElement();
