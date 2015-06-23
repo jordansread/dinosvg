@@ -13,9 +13,9 @@ add_axes <- function(g_id, axes, fig, y_rotate = 270){
   rect(g_id, fig$margins[2], fig$margins[3], diff(-fig$px_lim$y), diff(fig$px_lim$x), axis_style, id = "axis.box")
   y_ax_cent <- mean(c(fig$margins[3], fig$h-fig$margins[3]-fig$margins[1]))
   x_ax_cent <- mean(c(fig$margins[2], fig$w-fig$margins[4]-fig$margins[2]))
-  txt(g_id, text=axes$y_label, fig$margins[2]-x_ax_bump, y_ax_cent, rotate = y_rotate, "middle")
+  txt(g_id, text=axes$y_label, fig$margins[2]-x_ax_bump, y_ax_cent, rotate = y_rotate, "middle", id='y-label')
   if (!is.null(axes$x_label)){
-    txt(g_id, text=axes$x_label, x_ax_cent, fig$h-fig$margins[1]-fig$margins[3]+y_ax_bump, rotate = 0, "middle")
+    txt(g_id, text=axes$x_label, x_ax_cent, fig$h-fig$margins[1]-fig$margins[3]+y_ax_bump, rotate = 0, "middle", id='x-label')
   }
 
   

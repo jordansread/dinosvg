@@ -32,6 +32,7 @@ svg_init <- function(fig, def_opacity){
 {
                          svgDocument = evt.target.ownerDocument;
                          svgDocument.timeAdvance = this.timeAdvance;
+                         svgDocument.visibleAxes = this.visibleAxes;
 }
                          
                          legend = svgDocument.getElementById("legend");
@@ -66,6 +67,10 @@ svg_init <- function(fig, def_opacity){
 } 
                          function timeAdvance(){
   							          var ele = document.getElementById("timeAdvance");
+								          ele.beginElement();
+                         }
+                         function visibleAxes(){
+  							          var ele = document.getElementById("visibleAxes");
 								          ele.beginElement();
 							           }
                          ]]>
