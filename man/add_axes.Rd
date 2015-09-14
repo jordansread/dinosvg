@@ -4,7 +4,7 @@
 \alias{add_axes}
 \title{add axes and ticks to an svg document.}
 \usage{
-add_axes(g_id, axes, fig, y_rotate = 270)
+add_axes(g_id, axes, fig, y_rotate = 270, x_tick_rotate = 270)
 }
 \description{
 add axes and ticks to an svg document.

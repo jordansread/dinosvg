@@ -1,10 +1,9 @@
 #'@title add axes and ticks to an svg document. 
 #'@details transformation from plot space to pixel space is handled here. 
 #'@export
-add_axes <- function(g_id, axes, fig, y_rotate = 270){
+add_axes <- function(g_id, axes, fig, y_rotate = 270, x_tick_rotate=270){
   
   y_bump <- c(x=-5, y = 5)
-  x_bump <- c(x=0, y = 5) #tick label bumps
   x_ax_bump <- (max(nchar(axes$y_ticks))+1)*10 #axis label bump (should be based on nchar of axis labels?)
   y_ax_bump <- (max(nchar(axes$x_ticks))+2)*10 #axis label bump (should be based on nchar of axis labels?)
   axis_style <- "fill:#FFFFFF;stroke:black"
@@ -24,8 +23,8 @@ add_axes <- function(g_id, axes, fig, y_rotate = 270){
     x = tran_x(axes$x_ticks[i], axes, fig)
     
     line(g_id, c(x,x),c(y1,y1-axes$tick_len),style = "stroke:black;stroke-width:1.5")
-    txt(g_id, text=axes$x_tk_label[i], x = x+x_bump[['y']],
-        y = fig$h-fig$margins[1]-fig$margins[3]+x_bump[['y']], rotate = 270, "end")
+    txt(g_id, text=axes$x_tk_label[i], x = x,
+        y = fig$h-fig$margins[1]-fig$margins[3], rotate = x_tick_rotate, "middle", dy="1.0em")
   }
   x1 = fig$margins[2]
   for (i in 1:length(axes$y_ticks)){
