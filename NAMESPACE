@@ -3,6 +3,7 @@
 S3method(svg,gsplot)
 export(add_axes)
 export(add_boxwhisk)
+export(init_svg)
 export(sandbar_box)
 export(svg)
 export(svg_init)

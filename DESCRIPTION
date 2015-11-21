@@ -18,6 +18,7 @@ Imports:
 Suggests:
     testthat,
     xtable,
+    gsplot,
     knitr
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
