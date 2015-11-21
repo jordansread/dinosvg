@@ -4,7 +4,7 @@
 \alias{svg_points}
 \title{points to svg}
 \usage{
-svg_points(svg, window, x, y, col, cex = 1, ...)
+svg_points(svg, window, points, ...)
 }
 \arguments{
 \item{\dots}{all end up at attributes to the element}

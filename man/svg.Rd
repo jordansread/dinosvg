@@ -13,7 +13,7 @@ render svg
 \dontrun{
 library(gsplot)
 gs <- gsplot()
-gsNew <- points(gs, y=1, x=2, xlim=c(0,3),ylim=c(0,3),
+gsNew <- points(gs, y=1:10, x=2:11, 
             col="blue", pch=18, hovertext='point')
 svg(gsNew)
 }
