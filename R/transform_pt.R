@@ -24,3 +24,14 @@ tran_y <- function(val, axes, fig){
   return(y_px)
   
 }
+
+
+svg_coords <- function(vals, val.lims, svg.lims, log=FALSE){
+  stopifnot(!log)
+  
+  val.rng <- diff(val.lims)
+  svg.rng <- diff(svg.lims)
+  px.rat <- svg.rng/val.rng # ratio of px per plot unit val
+  
+  return(svg.lims[1] + vals*px.rat)
+}

@@ -11,10 +11,10 @@ render svg
 }
 \examples{
 \dontrun{
-#' library(gsplot)
+library(gsplot)
 gs <- gsplot()
 gsNew <- points(gs, y=1, x=2, xlim=c(0,3),ylim=c(0,3),
-            col="blue", pch=18, hovertext(labels='point'))
+            col="blue", pch=18, hovertext='point')
 svg(gsNew)
 }
 }
