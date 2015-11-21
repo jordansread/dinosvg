@@ -29,10 +29,12 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
   return(write_svg(svg, file))
 }
 
-#' @importFrom XML xmlAttrs
+#' @importFrom XML xmlAttrs newXMLTextNode
 svg_window <- function(svg, window){
   
-  mar <- c(30, 20, 10, 10) # c(bottom, left, top, right)
+  ppi <- 72 # points per inch, this SHOULD BE A PKG VAR...
+  
+  mar <- par()$mai*72 # c(bottom, left, top, right)
   tick.len <- 5
   g.axes <- newXMLNode('g', parent = svg,
                     attrs=c(id='axes', fill="none", stroke="#000000", 'stroke-width'="1"))
@@ -45,7 +47,7 @@ svg_window <- function(svg, window){
          height = view.box[4]-mar[1]-mar[3])
   
   newXMLNode('rect', parent = g.axes,
-             attrs=c(x=ax[['x']], y=ax[['y']], height=ax[['height']], width=ax[['width']]))
+             attrs=c(x=ax[['x']], y=ax[['y']], height=ax[['height']], width=ax[['width']], id='axes-box'))
   
   # x-ticks
   tick.loc <- list(
@@ -58,11 +60,18 @@ svg_window <- function(svg, window){
                                      sep=','),c('L','M'), collapse=''))
   
   
-  newXMLNode('path', parent = g.axes,
-             attrs=c(d=x.paths, id='x-axes-ticks'))
+  x.axis <- newXMLNode('g', parent = g.axes, attrs=c(id='x-axis'))
+  y.axis <- newXMLNode('g', parent = g.axes, attrs=c(id='y-axis'))
   
-  newXMLNode('path', parent = g.axes,
-             attrs=c(d=y.paths, id='y-axes-ticks'))
+  newXMLNode('path', parent = x.axis,
+             attrs=c(d=x.paths, id='x-axis-ticks'))
+  for (i in seq_len(length(tick.loc$x))){
+    newXMLNode("text", newXMLTextNode(pretty(window$xlim)[i]), 'parent' = x.axis,
+               attrs=c(x=tick.loc$x[i], y=ax[['y']] + ax[['height']], dy='1.0em', stroke='none',fill='#000000', 'text-anchor'="middle"))
+  }
+  
+  newXMLNode('path', parent = y.axis,
+             attrs=c(d=y.paths, id='y-axis-ticks'))
   invisible(svg)
 }
 
