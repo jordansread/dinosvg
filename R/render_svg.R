@@ -75,7 +75,7 @@ axis_side_1 <- function(g.axis, at=NULL, lim, view.bounds, tick.len, ...){
   
   at <- at[at >= min(lim) & at <= max(lim)]
   
-  coords <- svg_coords(at, lim, c(view.bounds[['x']], view.bounds[['x']] + view.bounds[['width']]))
+  coords <- dim_coords(at, lim, c(view.bounds[['x']], view.bounds[['x']] + view.bounds[['width']]))
   paths <- paste0('M', paste(paste(as.vector(sapply(coords, rep, 2)),
                                    c(view.bounds[['y']] + view.bounds[['height']], view.bounds[['y']] + view.bounds[['height']] - tick.len), sep=','),
                              c('L','M'), collapse=''))
@@ -94,7 +94,7 @@ axis_side_2 <- function(g.axis, at=NULL, lim, view.bounds, tick.len, ...){
   
   at <- at[at >= min(lim) & at <= max(lim)]
   
-  coords <- svg_coords(at, lim, c(c(view.bounds[['y']] + view.bounds[['height']], view.bounds[['y']])))
+  coords <- dim_coords(at, lim, c(c(view.bounds[['y']] + view.bounds[['height']], view.bounds[['y']])))
   paths <- paste0('M', paste(paste(c(view.bounds[['x']] , view.bounds[['x']] + tick.len), as.vector(sapply(coords, rep, 2)),
                                      sep=','),c('L','M'), collapse=''))
   svg_node('path', g.axis, c(d=paths, id='ticks'))
@@ -118,17 +118,15 @@ as.crd <- function(x){
 #' @param \dots all end up at attributes to the element
 svg_points <- function(svg, window, points, ...){
   
-  ax <- view_bounds(svg, side=window$side)
+  view.bounds <- view_bounds(svg, side=window$side)
   
-  x <- svg_coords(points$x, window$xlim, c(ax[['x']], ax[['x']] + ax[['width']]))
-  y <- svg_coords(points$y, window$ylim, c(ax[['y']] + ax[['height']], ax[['y']]))
-  
+
+  coords <- svg_coords(points$x, points$y, window$xlim, window$ylim, view.bounds)
   view_node <- xpathApply(svg, sprintf("//*[local-name()='g'][@id='view-%s-%s']", window$side[1], window$side[2]))
-  g.id <- newXMLNode('g', parent = view_node, attrs=c(fill='red'))
+  g.id <- svg_node('g', view_node, c(fill='red'))
   
-  for (i in seq_len(length(y))){
-    newXMLNode('circle', parent = g.id,
-               attrs=c(cx=x[i], cy=y[i], r='5'))
+  for (i in seq_len(length(coords$x))){
+    svg_node('circle', g.id, c(cx=coords$x[i], cy=coords$y[i], r='5'))
   }
   invisible(svg)
 }
