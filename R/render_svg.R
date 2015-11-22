@@ -63,10 +63,18 @@ svg_window <- function(svg, window){
   # x-ticks
   tick.loc <- list(
     x = svg_coords(coord.tick$x, window$xlim, c(ax[['x']], ax[['x']] + ax[['width']]), return.out=T),
-    y = svg_coords(coord.tick$x, window$ylim, c(ax[['y']] + ax[['height']], ax[['y']]), return.out=T))
+    y = svg_coords(coord.tick$y, window$ylim, c(ax[['y']] + ax[['height']], ax[['y']]), return.out=T))
   
-  x.paths <- paste0('M', paste(paste(as.vector(sapply(tick.loc$x, rep, 2)),
-                                     c(ax[['y']] + ax[['height']],ax[['y']] + ax[['height']] - tick.len), sep=','),c('L','M'), collapse=''))
+  if (window$side[1] == 1){
+    x.paths <- paste0('M', paste(paste(as.vector(sapply(tick.loc$x, rep, 2)),
+                                       c(ax[['y']] + ax[['height']], ax[['y']] + ax[['height']] - tick.len), sep=','),c('L','M'), collapse=''))
+  } else if (window$side[1] == 3){
+    x.paths <- paste0('M', paste(paste(as.vector(sapply(tick.loc$x, rep, 2)),
+                                       c(ax[['y']], ax[['y']] + tick.len), sep=','),c('L','M'), collapse=''))
+  } else {
+    warning('side ', window$side[1] , ' not supported', call. = FALSE)
+  }
+  
   y.paths <- paste0('M', paste(paste(c(ax[['x']] , ax[['x']] + tick.len), as.vector(sapply(tick.loc$y, rep, 2)),
                                      sep=','),c('L','M'), collapse=''))
   
@@ -91,6 +99,8 @@ svg_window <- function(svg, window){
   }
   invisible(svg)
 }
+
+ticks_side_1 <- function(svg, )
 
 svg_node <- function(name, parent, attrs, ...){
   invisible(newXMLNode(name = name, parent = parent,
