@@ -100,7 +100,9 @@ svg_window <- function(svg, window){
   invisible(svg)
 }
 
-ticks_side_1 <- function(svg, )
+axis_side_1 <- function(svg, ...){
+  
+}
 
 svg_node <- function(name, parent, attrs, ...){
   invisible(newXMLNode(name = name, parent = parent,
