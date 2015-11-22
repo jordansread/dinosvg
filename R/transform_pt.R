@@ -26,7 +26,7 @@ tran_y <- function(val, axes, fig){
 }
 
 
-svg_coords <- function(vals, val.lims, svg.lims, log=FALSE, return.out=TRUE){
+svg_coords <- function(vals, val.lims, svg.lims, log=FALSE){
   stopifnot(!log)
   
   val.rng <- diff(val.lims)
@@ -34,8 +34,6 @@ svg_coords <- function(vals, val.lims, svg.lims, log=FALSE, return.out=TRUE){
   px.rat <- svg.rng/val.rng # ratio of px per plot unit val
   
   px.vals <- svg.lims[1] + (vals-val.lims[1])*px.rat
-  if (!return.out){
-    px.vals <- px.vals[px.vals >= min(svg.lims) & px.vals <= max(svg.lims)]
-  }
-  return(px.vals)
+
+  return(as.crd(px.vals))
 }
