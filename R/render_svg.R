@@ -19,12 +19,12 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
 
   svg <- init_svg(width, height, ...)
   add_css(svg)
-  add_tooltip(svg)
+  
   for (view in gsplot:::views(object)){
     par(par(object)) # set global par to object par
     render_view(svg, view)
   }
-  
+  add_tooltip(svg)
   # get par
   # set the page dimensions
   # translate coordinates
@@ -166,6 +166,8 @@ axis_side_2 <- function(g.axis, at=NULL, lim, view.bounds, tick.len, ...){
     svg_node("text", y.axis.text, c(y=coords[i], x=view.bounds[['x']], dx='-0.33em', dy='0.33em'), newXMLTextNode(at[i]))
   }
 }
+
+#' @importFrom XML newXMLNode
 svg_node <- function(name, parent, attrs=NULL, ...){
   invisible(newXMLNode(name = name, parent = parent,
              attrs=attrs, ...))
