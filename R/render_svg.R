@@ -3,10 +3,12 @@
 #' @examples 
 #' \dontrun{
 #' library(gsplot)
-#' gs <- gsplot()
-#' gsNew <- points(gs, y=1:10, x=2:11, 
-#'             col="blue", pch=18, hovertext=paste0('text:',1:10))
-#' svg(gsNew)
+#' gs <- gsplot() %>% 
+#'    points(y=1:10, x=2:11, 
+#'             col="blue", pch=18, hovertext=paste0('text:',1:10)) %>% 
+#'    points(x=4:11, y=11:4, 
+#'             col="red", pch=1, hovertext=paste0('text:',11:4))
+#' svg(gs)
 #' }
 #' @export
 #' @import gsplot
@@ -202,6 +204,9 @@ add_tooltip <- function(svg, dx="0.2em", dy='-0.2em',fill="#000000"){
   \tvar tooltip = document.getElementById("tooltip");
   \tif (x === undefined){
   \t\ttooltip.setAttribute("class","hidden");
+  \t\ttooltip.setAttribute("x",0);
+  \t\ttooltip.setAttribute("y",0);
+  \t\ttooltip.firstChild.data = " ";
   \t} else {
   \t\ttooltip.setAttribute("x",x);
   \t\ttooltip.setAttribute("y",y);

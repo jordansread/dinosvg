@@ -12,10 +12,12 @@ render svg
 \examples{
 \dontrun{
 library(gsplot)
-gs <- gsplot()
-gsNew <- points(gs, y=1:10, x=2:11, 
-            col="blue", pch=18, hovertext=paste0('text:',1:10))
-svg(gsNew)
+gs <- gsplot() \%>\% 
+   points(y=1:10, x=2:11, 
+            col="blue", pch=18, hovertext=paste0('text:',1:10)) \%>\% 
+   points(x=4:11, y=11:4, 
+            col="red", pch=1, hovertext=paste0('text:',11:4))
+svg(gs)
 }
 }
 
