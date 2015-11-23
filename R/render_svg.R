@@ -5,7 +5,7 @@
 #' library(gsplot)
 #' gs <- gsplot()
 #' gsNew <- points(gs, y=1:10, x=2:11, 
-#'             col="blue", pch=18, hovertext='point')
+#'             col="blue", pch=18, hovertext=paste0('text:',1:10))
 #' svg(gsNew)
 #' }
 #' @export
@@ -17,10 +17,14 @@ svg <- function(object, ...){
 #' @export
 svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, pointsize = 12, ...){
 
-  par <- par(object)
   svg <- init_svg(width, height, ...)
-  svg_window(svg, window=object$view$window)
-  svg_points(svg, window=object$view$window, points=object$view$points)
+  add_css(svg)
+  add_tooltip(svg)
+  for (view in gsplot:::views(object)){
+    par(par(object)) # set global par to object par
+    render_view(svg, view)
+  }
+  
   # get par
   # set the page dimensions
   # translate coordinates
@@ -28,6 +32,65 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
   # do.call for gsplot elements, skip those w/o `svg_` functions and warn
   # invisible return of filename
   return(write_svg(svg, file))
+}
+
+render_view <- function(svg, view){
+  window <- view[['window']]
+  geoms <- view
+  geoms[['window']] <- NULL
+  par(window[['par']])
+  
+  g.view <- render_window(svg, window)
+
+  for (i in seq_len(length(geoms))){
+    fun_name <- paste0('render_',names(geoms[i]))
+    if (exists(fun_name)){
+      args <- append(list(g.view=g.view), geoms[[i]]) %>% 
+        append(list(xlim=window[['xlim']], ylim=window[['ylim']]))
+      do.call(fun_name, args)
+    } else {
+      message(fun_name, " doesn't exist in ", packageName())
+    }
+    
+  }
+  
+  
+  g.axes <- xpathApply(g.view, "//*[local-name()='g'][@id='axes']")[[1]]
+  view.bounds <- view_bounds(g.view)
+  x.axis <- svg_node('g', g.axes, c(id='axis-side-1'))
+  y.axis <- svg_node('g', g.axes, c(id='axis-side-2'))
+  
+  tick.len <- 5
+  
+  axis_side_1(x.axis, lim=window$xlim, view.bounds = view.bounds, tick.len = tick.len)
+  axis_side_2(y.axis, lim=window$ylim, view.bounds = view.bounds, tick.len = tick.len)
+  
+}
+
+
+render_points <- function(g.view, x, y, pch=par("pch"), col=par("col"), bg="#FFFFFF00", cex=1, lwd=par("lwd"), xlim, ylim, hovertext=NULL, ...){
+  
+  args <- expand.grid(..., stringsAsFactors = FALSE)
+  view.bounds <- view_bounds(g.view)
+  radius <- as.crd(cex*2.7) # need to use ppi?
+  coords <- svg_coords(x, y, xlim, ylim, view.bounds)
+
+  clip.id <- svg_id(xpathApply(g.view, "//*[local-name()='clipPath'][contains(@id,'mask')]")[[1]])
+  g.geom <- svg_node('g', g.view, c('fill'=col, 'clip-path'=sprintf("url(#%s)",clip.id), args))
+  
+  for (i in seq_len(length(coords$x))){
+    if (!is.null(hovertext)){
+      hover.args <- c(onmouseover=sprintf("hovertext('%s',%s,%s)",hovertext[i],coords$x[i],coords$y[i]), onmouseout="hovertext(' ')") 
+    } else 
+      hover.args <- NULL
+    svg_node('circle', g.geom, c(cx=coords$x[i], cy=coords$y[i], r=radius, hover.args))
+  }
+
+}
+
+#' @importFrom XML xmlAttrs
+svg_id <- function(ele){
+  xmlAttrs(ele)[[1]]
 }
 
 #' @importFrom XML xmlAttrs
@@ -43,29 +106,28 @@ svg_view_bounds <- function(svg, mai){
          height = view.box[4]-mar[1]-mar[3])
 }
 #' @importFrom XML xpathApply
-view_bounds <- function(svg, side){
-  box_node <- xpathApply(svg, sprintf("//*[local-name()='g'][@id='view-%s-%s']//*[local-name()='rect'][@id='axes-box']", side[1], side[2]))
+view_bounds <- function(svg, side=NULL){
+  if (is.null(side)){
+    box_node <- xpathApply(svg, "//*[local-name()='rect'][@id='axes-box']")
+  } else {
+    box_node <- xpathApply(svg, sprintf("//*[local-name()='g'][@id='view-%s-%s']//*[local-name()='rect'][@id='axes-box']", side[1], side[2]))
+  }
+  
   sapply(xmlAttrs(box_node[[1]])[c('x','y','height','width')], as.numeric)
 }
 
 #' @importFrom XML newXMLTextNode
-svg_window <- function(svg, window){
+render_window <- function(svg, window){
 
+  ax <- svg_view_bounds(svg, mai=par()$mai)
+  
   g.view <- svg_node('g', svg, c('id'=sprintf('view-%s-%s', window$side[1], window$side[2])))
+  svg_node('rect', svg_node('clipPath',svg_node('defs',g.view), c(id=sprintf('mask-%s-%s', window$side[1], window$side[2]))), c(x=ax[['x']], y=ax[['y']], height=ax[['height']], width=ax[['width']]))
   g.axes <- svg_node('g', g.view, c('id'="axes", 'fill'="none", 'stroke'="#000000", 'stroke-width'="1"))
   
-  ax <- svg_view_bounds(svg, mai=par()$mai)
   svg_node('rect', g.axes, c(x=ax[['x']], y=ax[['y']], height=ax[['height']], width=ax[['width']], id='axes-box'))
   
-  view.bounds <- view_bounds(svg, window$side)
-  
-  x.axis <- svg_node('g', g.axes, c(id='x-axis'))
-  y.axis <- svg_node('g', g.axes, c(id='y-axis'))
-  
-  tick.len <- 5
-  
-  axis_side_1(x.axis, lim=window$xlim, view.bounds = view.bounds, tick.len = tick.len)
-  axis_side_2(y.axis, lim=window$ylim, view.bounds = view.bounds, tick.len = tick.len)
+  invisible(g.view)
 }
 
 axis_side_1 <- function(g.axis, at=NULL, lim, view.bounds, tick.len, ...){
@@ -104,7 +166,7 @@ axis_side_2 <- function(g.axis, at=NULL, lim, view.bounds, tick.len, ...){
     svg_node("text", y.axis.text, c(y=coords[i], x=view.bounds[['x']], dx='-0.33em', dy='0.33em'), newXMLTextNode(at[i]))
   }
 }
-svg_node <- function(name, parent, attrs, ...){
+svg_node <- function(name, parent, attrs=NULL, ...){
   invisible(newXMLNode(name = name, parent = parent,
              attrs=attrs, ...))
 }
@@ -113,20 +175,37 @@ as.crd <- function(x){
   sprintf('%s',round(as.vector(x), digits = 3))
 }
 
-#' points to svg
-#' 
-#' @param \dots all end up at attributes to the element
-svg_points <- function(svg, window, points, ...){
-  
-  view.bounds <- view_bounds(svg, side=window$side)
-  
 
-  coords <- svg_coords(points$x, points$y, window$xlim, window$ylim, view.bounds)
-  view_node <- xpathApply(svg, sprintf("//*[local-name()='g'][@id='view-%s-%s']", window$side[1], window$side[2]))
-  g.id <- svg_node('g', view_node, c(fill='red'))
+#' @importFrom XML newXMLTextNode
+add_css <- function(svg){
+  css <- 
+    '\n.shown, .hidden {
+      \t-webkit-transition: opacity 0.2s ease-in-out;
+      \t-moz-transition: opacity 0.2s ease-in-out;
+      \t-o-transition: opacity 0.2s ease-in-out;
+      \ttransition: opacity 0.2s ease-in-out;
+    }
+  .hidden {
+    \topacity:0;
+  }\n'
+  svg_node("style", svg, attrs=NULL, newXMLTextNode(css))
   
-  for (i in seq_len(length(coords$x))){
-    svg_node('circle', g.id, c(cx=coords$x[i], cy=coords$y[i], r='5'))
-  }
-  invisible(svg)
+}
+
+#' @importFrom XML newXMLCDataNode newXMLTextNode
+add_tooltip <- function(svg, dx="0.2em", dy='-0.2em',fill="#000000"){
+  svg_node("text", svg, c(id='tooltip',dx=dx, dy=dy, 'stroke'="none", 'fill'=fill), newXMLTextNode(" "))
+  tool_fun <- 
+    '\nfunction hovertext(text, x, y){
+  \tvar tooltip = document.getElementById("tooltip");
+  \tif (x === undefined){
+  \t\ttooltip.setAttribute("class","hidden");
+  \t} else {
+  \t\ttooltip.setAttribute("x",x);
+  \t\ttooltip.setAttribute("y",y);
+  \t\ttooltip.firstChild.data = text;
+  \t\ttooltip.setAttribute("class","shown");
+  \t}
+  }'
+  svg_node("script", svg, attrs=c(type="text/ecmascript"), newXMLCDataNode(tool_fun))
 }

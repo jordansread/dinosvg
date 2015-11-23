@@ -14,7 +14,7 @@ render svg
 library(gsplot)
 gs <- gsplot()
 gsNew <- points(gs, y=1:10, x=2:11, 
-            col="blue", pch=18, hovertext='point')
+            col="blue", pch=18, hovertext=paste0('text:',1:10))
 svg(gsNew)
 }
 }
