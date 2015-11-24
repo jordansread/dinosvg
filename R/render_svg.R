@@ -7,7 +7,8 @@
 #'    points(y=1:10, x=2:11, 
 #'             col="blue", pch=18, hovertext=paste0('text:',1:10)) %>% 
 #'    points(x=4:11, y=11:4, 
-#'             col="red", pch=1, hovertext=paste0('text:',11:4))
+#'             col="red", pch=1, hovertext=paste0('text:',11:4)) %>% 
+#'    points(3:5,4:6,side=c(1,4), col='green')
 #' svg(gs)
 #' }
 #' @export
