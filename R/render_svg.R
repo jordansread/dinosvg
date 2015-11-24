@@ -5,7 +5,7 @@
 #' library(gsplot)
 #' gs <- gsplot() %>% 
 #'    points(y=1:10, x=2:11, 
-#'             col="blue", pch=18, hovertext=paste0('text:',1:10)) %>% 
+#'             col="blue", pch=18, hovertext=paste0('text:',1:10), xlab='pizza', ylab='dogs') %>% 
 #'    points(x=4:11, y=11:4, 
 #'             col="red", pch=1, hovertext=paste0('text:',11:4)) %>% 
 #'    points(3:5,4:6,side=c(1,4), col='green', hovertext='green') %>% 
@@ -48,16 +48,13 @@ render_view <- function(svg, view){
   g.view <- g_view(svg,window[['side']])
   render_geoms(g.view, geoms, window)
   
-  
   g.axes <- g_axes(g.view)
   view.bounds <- view_bounds(g.view)
-  x.axis <- svg_node('g', g.axes, c(id='axis-side-1'))
-  y.axis <- svg_node('g', g.axes, c(id='axis-side-2'))
   
   tick.len <- 5
   
-  render_axis(x.axis, window[['side']][1], lim=window$xlim, view.bounds = view.bounds, tick.len = tick.len)
-  render_axis(y.axis, window[['side']][2], lim=window$xlim, view.bounds = view.bounds, tick.len = tick.len)
+  render_axis(g.axes, window[['side']][1], lim=window$xlim, view.bounds = view.bounds, tick.len = tick.len, axis.label=window$xlab)
+  render_axis(g.axes, window[['side']][2], lim=window$ylim, view.bounds = view.bounds, tick.len = tick.len, axis.label=window$ylab)
   
 }
 render_geoms <- function(g.view, geoms, window){
