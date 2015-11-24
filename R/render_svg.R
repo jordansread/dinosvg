@@ -65,8 +65,8 @@ render_view <- function(svg, view){
   
   tick.len <- 5
   
-  axis_side_1(x.axis, lim=window$xlim, view.bounds = view.bounds, tick.len = tick.len)
-  axis_side_2(y.axis, lim=window$ylim, view.bounds = view.bounds, tick.len = tick.len)
+  render_axis(x.axis, window[['side']][1], lim=window$xlim, view.bounds = view.bounds, tick.len = tick.len)
+  render_axis(y.axis, window[['side']][2], lim=window$xlim, view.bounds = view.bounds, tick.len = tick.len)
   
 }
 
@@ -78,7 +78,7 @@ render_points <- function(g.view, x, y, pch=par("pch"), col=par("col"), bg="#FFF
   radius <- as.crd(cex*2.7) # need to use ppi?
   coords <- svg_coords(x, y, xlim, ylim, view.bounds)
 
-  clip.id <- svg_id(xpathApply(g.view, "//*[local-name()='clipPath'][contains(@id,'mask')]")[[1]])
+  clip.id <- svg_id(view_mask(g.view))
   g.geom <- svg_node('g', g.view, c('fill'=col, 'clip-path'=sprintf("url(#%s)",clip.id), args))
   
   for (i in seq_len(length(coords$x))){
@@ -111,12 +111,20 @@ svg_view_bounds <- function(svg, mai){
 #' @importFrom XML xpathApply
 view_bounds <- function(svg, side=NULL){
   if (is.null(side)){
-    box_node <- xpathApply(svg, "//*[local-name()='rect'][@id='axes-box']")
+    box.node <- xpathApply(svg, "//*[local-name()='rect'][@id='axes-box']")
   } else {
-    box_node <- xpathApply(svg, sprintf("//*[local-name()='g'][@id='view-%s-%s']//*[local-name()='rect'][@id='axes-box']", side[1], side[2]))
+    box.node <- xpathApply(svg, sprintf("//*[local-name()='g'][@id='view-%s-%s']//*[local-name()='rect'][@id='axes-box']", side[1], side[2]))
   }
   
-  sapply(xmlAttrs(box_node[[1]])[c('x','y','height','width')], as.numeric)
+  sapply(xmlAttrs(box.node[[1]])[c('x','y','height','width')], as.numeric)
+}
+
+view_mask <- function(svg, side=NULL){
+  if (is.null(side)){
+    xpathApply(svg, "//*[local-name()='clipPath'][contains(@id,'mask')]")[[1]]
+  } else {
+    xpathApply(svg, sprintf("//*[local-name()='g'][@id='view-%s-%s']//*[local-name()='clipPath'][contains(@id,'mask')]", side[1], side[2]))[[1]]
+  }
 }
 
 #' @importFrom XML newXMLTextNode
@@ -133,42 +141,6 @@ render_window <- function(svg, window){
   invisible(g.view)
 }
 
-axis_side_1 <- function(g.axis, at=NULL, lim, view.bounds, tick.len, ...){
-  
-  if (is.null(at))
-    at <- pretty(lim)
-  
-  at <- at[at >= min(lim) & at <= max(lim)]
-  
-  coords <- dim_coords(at, lim, c(view.bounds[['x']], view.bounds[['x']] + view.bounds[['width']]))
-  paths <- paste0('M', paste(paste(as.vector(sapply(coords, rep, 2)),
-                                   c(view.bounds[['y']] + view.bounds[['height']], view.bounds[['y']] + view.bounds[['height']] - tick.len), sep=','),
-                             c('L','M'), collapse=''))
-  svg_node('path', g.axis, c(d=paths, id='ticks'))
-  
-  x.axis.text <- svg_node('g', g.axis, c(id='tick-labels', stroke='none',fill='#000000', 'text-anchor'="middle"))
-  for (i in seq_len(length(at))){
-    newXMLNode("text", newXMLTextNode(at[i]), 'parent' = x.axis.text,
-               attrs=c(x=coords[i], y=view.bounds[['y']] + view.bounds[['height']], dy='1.0em'))
-  }
-}
-
-axis_side_2 <- function(g.axis, at=NULL, lim, view.bounds, tick.len, ...){
-  if (is.null(at))
-    at <- pretty(lim)
-  
-  at <- at[at >= min(lim) & at <= max(lim)]
-  
-  coords <- dim_coords(at, lim, c(c(view.bounds[['y']] + view.bounds[['height']], view.bounds[['y']])))
-  paths <- paste0('M', paste(paste(c(view.bounds[['x']] , view.bounds[['x']] + tick.len), as.vector(sapply(coords, rep, 2)),
-                                     sep=','),c('L','M'), collapse=''))
-  svg_node('path', g.axis, c(d=paths, id='ticks'))
-  
-  y.axis.text <- svg_node('g', g.axis, c(id='tick-labels', stroke='none',fill='#000000', 'text-anchor'="end"))
-  for (i in seq_len(length(at))){
-    svg_node("text", y.axis.text, c(y=coords[i], x=view.bounds[['x']], dx='-0.33em', dy='0.33em'), newXMLTextNode(at[i]))
-  }
-}
 
 #' @importFrom XML newXMLNode
 svg_node <- function(name, parent, attrs=NULL, ...){
@@ -207,7 +179,7 @@ add_tooltip <- function(svg, dx="0.2em", dy='-0.2em',fill="#000000"){
   \t\ttooltip.setAttribute("class","hidden");
   \t\ttooltip.setAttribute("x",0);
   \t\ttooltip.setAttribute("y",0);
-  \t\ttooltip.firstChild.data = " ";
+  \t\ttooltip.firstChild.data = text;
   \t} else {
   \t\ttooltip.setAttribute("x",x);
   \t\ttooltip.setAttribute("y",y);
