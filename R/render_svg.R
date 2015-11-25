@@ -57,13 +57,18 @@ render_view <- function(svg, view){
   render_axis(g.axes, window[['side']][2], lim=window$ylim, view.bounds = view.bounds, tick.len = tick.len, axis.label=window$ylab)
   
 }
+
+as.rgb <- function(col){
+  paste0('rgb(',paste(as.vector(col2rgb(col)),collapse=','),')')
+}
 render_geoms <- function(g.view, geoms, window){
   for (i in seq_len(length(geoms))){
     fun_name <- paste0('render_',names(geoms[i]))
     if (exists(fun_name)){
       args <- append(list(g.view=g.view), geoms[[i]]) %>% 
         append(list(xlim=window[['xlim']], ylim=window[['ylim']]))
-      do.call(fun_name, args)
+      # hack! but removes duplicate formals (e.g., xlim specified both in window and the args for the function)
+      do.call(fun_name, args[unique(names(args))])
     } else {
       message(fun_name, " doesn't exist in ", packageName())
     }
@@ -126,8 +131,7 @@ xpath_one <- function(svg, xpath){
   
   if (length(nodes) > 1)
     stop('more than one element found for ', xpath)
-  if (length(nodes) == 1)
-    return(NULL)
+
   return(nodes[[1]])
 }
 

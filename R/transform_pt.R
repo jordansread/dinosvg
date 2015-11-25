@@ -36,11 +36,11 @@ svg_coords <- function(x, y=NULL, xlim, ylim=NULL, view.bounds, log=''){
 dim_coords <- function(vals, val.lims, svg.lims, log=FALSE){
   stopifnot(!log)
   
-  val.rng <- diff(val.lims)
+  val.rng <- diff(as.numeric(val.lims))
   svg.rng <- diff(svg.lims)
   px.rat <- svg.rng/val.rng # ratio of px per plot unit val
   
-  px.vals <- svg.lims[1] + (vals-val.lims[1])*px.rat
+  px.vals <- svg.lims[1] + (as.numeric(vals)-as.numeric(val.lims[1]))*px.rat
 
   return(as.crd(px.vals))
 }
