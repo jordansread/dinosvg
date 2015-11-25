@@ -73,6 +73,11 @@ render_axis_4 <- function(g.axis, at=NULL, lim, view.bounds, tick.len, axis.labe
   for (i in seq_len(length(at))){
     svg_node("text", tick.labels, c(x=x[1], y=coords[i], dx='0.33em', dy='0.33em'), newXMLTextNode(at[i]))
   }
+  if (!missing(axis.label) & axis.label != ''){
+    a.axis.label <- svg_node('g', g.axis, c(id='axis-label', stroke='none',fill='#000000', 'text-anchor'="middle"))
+    y.pos <-as.crd(view.bounds[['y']] + view.bounds[['height']]/2)
+    svg_node("text", a.axis.label, c(x=x[1], y=y.pos, dy='2.0em',transform=sprintf("rotate(-90 %s,%s)",x[1],y.pos)), newXMLTextNode(axis.label))  
+  }
 }
 
 render_ticks <- function(g.axis, x, y){
