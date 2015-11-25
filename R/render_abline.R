@@ -12,7 +12,7 @@ render_abline <- function(g.view, a = NULL, b = NULL, h = NULL, v = NULL, reg = 
     
     x <- svg_coords(x=v,xlim=xlim, view.bounds = view.bounds)$x
     for (i in seq_len(length(x))){
-      svg_node('line', g.geom, c(x1=x[i], y1=y1, x2=x[i], y2=y2))
+      svg_node('path', g.geom, c(d=sprintf('M %s,%s V %s',x[i], y1, y2)))
     }
   } else if (!is.null(v)){
     x1 <- view.bounds[['x']]
@@ -20,7 +20,7 @@ render_abline <- function(g.view, a = NULL, b = NULL, h = NULL, v = NULL, reg = 
     
     y <- svg_coords(y=h,ylim=ylim, view.bounds = view.bounds)$y
     for (i in seq_len(length(y))){
-      svg_node('line', g.geom, c(x1=x1, y1=y[i], x2=x2, y2=y[i]))
+      svg_node('path', g.geom, c(d=sprintf('M %s,%s H %s',x1, y[i], y2)))
     }
   } else {
     message('these arguments are not currently supported for render_abline')
