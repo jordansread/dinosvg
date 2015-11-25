@@ -12,14 +12,14 @@ render_points <- function(g.view, x, y, pch=par("pch"), col=par("col"), bg="#FFF
   }
   
   pch <- as.character(pch)
-  g.geom <- svg_node('g', g.view, c('fill'=col, 'clip-path'=sprintf("url(#%s)",clip.id), args))
+  g.geom <- svg_node('g', g.view, c('fill'=as.rgb(col), 'clip-path'=sprintf("url(#%s)",clip.id), args))
   
   for (i in seq_len(length(coords$x))){
     if (!is.null(hovertext)){
       hover.args <- c(onmouseover=sprintf("hovertext('%s',%s,%s)",hovertext[i],coords$x[i],coords$y[i]), onmouseout="hovertext(' ')") 
     } else 
       hover.args <- NULL
-    points_node(g.geom, coords$x[i], coords$y[i], pch, col, bg, cex, lwd, hover.args)
+    points_node(g.geom, coords$x[i], coords$y[i], pch, as.rgb(col), as.rgb(col), cex, lwd, hover.args)
   }
 }
 
