@@ -26,10 +26,11 @@ tran_y <- function(val, axes, fig){
 }
 
 svg_coords <- function(x, y=NULL, xlim, ylim=NULL, view.bounds, log='', as.crd=TRUE){
-  coords <- list(x=c(), y=c())
-  coords$x <- dim_coords(x, xlim, c(view.bounds[['x']],view.bounds[['x']] + view.bounds[['width']]))
-  if (!is.null(y) & !is.null(ylim))
-    coords$y <- dim_coords(y, ylim, c(view.bounds[['y']] + view.bounds[['height']], view.bounds[['y']]))
+  coords <- list()
+  if (!missing(x) && !is.null(x))
+    coords$x <- dim_coords(x, xlim, c(view.bounds[['x']],view.bounds[['x']] + view.bounds[['width']]), as.crd=as.crd)
+  if (!is.null(y))
+    coords$y <- dim_coords(y, ylim, c(view.bounds[['y']] + view.bounds[['height']], view.bounds[['y']]), as.crd=as.crd)
   return(coords)
 }
 
