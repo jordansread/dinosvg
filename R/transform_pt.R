@@ -25,7 +25,7 @@ tran_y <- function(val, axes, fig){
   
 }
 
-svg_coords <- function(x, y=NULL, xlim, ylim=NULL, view.bounds, log=''){
+svg_coords <- function(x, y=NULL, xlim, ylim=NULL, view.bounds, log='', as.crd=TRUE){
   coords <- list(x=c(), y=c())
   coords$x <- dim_coords(x, xlim, c(view.bounds[['x']],view.bounds[['x']] + view.bounds[['width']]))
   if (!is.null(y) & !is.null(ylim))
@@ -33,7 +33,7 @@ svg_coords <- function(x, y=NULL, xlim, ylim=NULL, view.bounds, log=''){
   return(coords)
 }
 
-dim_coords <- function(vals, val.lims, svg.lims, log=FALSE){
+dim_coords <- function(vals, val.lims, svg.lims, log=FALSE, as.crd=TRUE){
   stopifnot(!log)
   
   val.rng <- diff(as.numeric(val.lims))
@@ -42,5 +42,8 @@ dim_coords <- function(vals, val.lims, svg.lims, log=FALSE){
   
   px.vals <- svg.lims[1] + (as.numeric(vals)-as.numeric(val.lims[1]))*px.rat
 
-  return(as.crd(px.vals))
+  if (as.crd)
+    as.crd(px.vals)
+  else
+    px.vals
 }
