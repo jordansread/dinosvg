@@ -4,7 +4,7 @@ render_abline <- function(g.view, a = NULL, b = NULL, h = NULL, v = NULL, reg = 
   args <- expand.grid(..., stringsAsFactors = FALSE)
   view.bounds <- view_bounds(g.view)
   clip.id <- svg_id(g_mask(g.view))
-  g.geom <- svg_node('g', g.view, c('stroke'=col, 'fill'="none", 'clip-path'=sprintf("url(#%s)",clip.id), args))
+  g.geom <- svg_node('g', g.view, c('stroke'=as.rgb(col), as.lty(lty), 'clip-path'=sprintf("url(#%s)",clip.id), args))
   
   if (!is.null(v)){
     y1 <- view.bounds[['y']] + view.bounds[['height']]
