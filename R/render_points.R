@@ -68,7 +68,7 @@ points_node <- function(g, x, y, pch, col, bg, cex, lwd, ...){
           '11' = svg_node('path', g, c(d=paste0(geoms[['up.tri']][['d']],' ',geoms[['dwn.tri']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
           '12' = svg_node('path', g, c(d=paste0(geoms[['sm.cross']][['d']],' ',geoms[['square']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
           '13' = svg_node('path', g, c(d=paste0(geoms[['x']][['d']],' ',geoms[['square']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...)), #needs path circle
-          '14' = svg_node('path', g, c(geoms[['tri.square']], fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
+          '14' = svg_node('path', g, c(geoms[['tri.square']], fill=transparent, 'fill-opacity'="0", stroke=col, 'stroke-linejoin'="bevel", ...)),
           '15' = svg_node('path', g, c(geoms[['square']], fill=col, stroke=col, ...)),
           '16' = svg_node('circle', g, c(cx=x, cy=y, r=as.crd(cex*2.7), fill=col, stroke=col, ...)),
           '17' = svg_node('path', g, c(geoms[['up.tri']], fill=col, stroke=col, ...)),
