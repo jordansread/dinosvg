@@ -48,7 +48,7 @@ points_node <- function(g, x, y, pch, col, bg, cex, lwd, ...){
                                       y=c(num[2]+std.rad*1.5,num[2]-std.rad*0.75,num[2]-std.rad*0.75))),
                 tri.square = c(d=sprintf('M %s,%s h %s v %s h %s Z M %s,%s L %s,%s L %s,%s', 
                                          num[1]-std.rad,num[2]-std.rad, 2*std.rad, 2*std.rad, -2*std.rad, 
-                                         num[1]-std.rad,num[2]-std.rad, num[1], num[2]+std.rad, num[1]+std.rad, num[2]-std.rad)))
+                                         num[1]-std.rad,num[2]+std.rad, num[1], num[2]-std.rad, num[1]+std.rad, num[2]+std.rad)))
                 
   
   transparent <- "#FFFFFF"
