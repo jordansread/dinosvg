@@ -45,9 +45,8 @@ render_view <- function(svg, view){
   par(window[['par']])
   
   render_window(svg, window)
-  g.view <- g_view(svg,window[['side']])
-  render_geoms(g.view, geoms, window)
   
+  g.view <- g_view(svg,window[['side']])
   g.axes <- g_axes(g.view)
   view.bounds <- view_bounds(g.view)
   
@@ -56,6 +55,22 @@ render_view <- function(svg, view){
   render_axis(g.axes, window[['side']][1], lim=window$xlim, view.bounds = view.bounds, tick.len = tick.len, axis.label=window$xlab)
   render_axis(g.axes, window[['side']][2], lim=window$ylim, view.bounds = view.bounds, tick.len = tick.len, axis.label=window$ylab)
   
+  render_geoms(g.view, geoms, window)
+  
+}
+
+tick_location <- function(g.view, reference='x', side=NULL){
+  
+  stopifnot(is.null(side)) # not supported yet, but is here to explicity call the side arg
+  
+  tick.i <- c('x'=2,'y'=3) # for how to parse the path
+  
+  sides <- tail(strsplit(xmlAttrs(g.view)[['id']],'[-]')[[1]],-1L) %>% 
+    setNames(c('x','y'))
+  side <- sides[[reference]]
+
+  nodes <- xpathApply(g_side(g.view, side), path = "//*[local-name()='g'][@id='ticks']/*[local-name()='path']")
+  unname(sapply(nodes, function(x)strsplit(xmlAttrs(x), '[, ]')[[1]][tick.i[[reference]]]))
 }
 
 as.rgb <- function(col){
@@ -120,6 +135,10 @@ view_bounds <- function(svg, side=NULL){
   }
   
   sapply(xmlAttrs(box.node)[c('x','y','height','width')], as.numeric)
+}
+
+g_side <- function(svg, side){
+  xpath_one(svg, sprintf("//*[local-name()='g'][@id='axis-side-%s']", side))
 }
 
 g_mask <- function(svg, side=NULL){
