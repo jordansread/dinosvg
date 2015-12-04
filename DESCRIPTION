@@ -1,7 +1,7 @@
 Package: dinosvg
 Type: Package
 Title: Create dynamic SVGs from scratch
-Version: 0.1.9
+Version: 0.2.0
 Date: 2015-02-25
 Author: Jordan S Read
 Maintainer: Jordan S Read <jread@usgs.gov>
