@@ -6,15 +6,20 @@ render_grid <- function(g.view, nx = NULL, ny = nx, col = "lightgray", lty = "do
   
   # x
   if (is.null(nx)){
-    # find ticks in x, use them. g.view
-    #g.view
+    x <- tick_location(g.view, 'x')
+    for (i in seq_len(length(x))){
+      svg_node('path', g.geom, c(d=sprintf('M %s,%s v %s',x[i], view.bounds[['y']], view.bounds[['height']])))
+    }
   } else if (!is.na(nx) && nx > 0){
     message('these arguments are not currently supported for render_grid')
   } # else do nothing (NA or 0)
   
   # y
   if (is.null(ny)){
-    tick_location(g.view, 'y')
+    y <- tick_location(g.view, 'y')
+    for (i in seq_len(length(y))){
+      svg_node('path', g.geom, c(d=sprintf('M %s,%s h %s',view.bounds[['x']], y[i], view.bounds[['width']])))
+    }
   } else if (!is.na(ny) && ny > 0){
     message('these arguments are not currently supported for render_grid')
   }
