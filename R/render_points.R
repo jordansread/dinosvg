@@ -1,6 +1,5 @@
 render_points <- function(g.view, x, y, pch=par("pch"), col=par("col"), bg="#FFFFFF00", cex=1, lwd=par("lwd"), xlim, ylim, hovertext=NULL, ...){
-  
-  args <- expand.grid(..., stringsAsFactors = FALSE)
+  args <- filter_dot_args(...)
   view.bounds <- view_bounds(g.view)
   
   coords <- svg_coords(x, y, xlim, ylim, view.bounds)
@@ -12,19 +11,39 @@ render_points <- function(g.view, x, y, pch=par("pch"), col=par("col"), bg="#FFF
   }
   
   pch <- as.character(pch)
-  g.geom <- svg_node('g', g.view, c('fill'=as.rgb(col), 'clip-path'=sprintf("url(#%s)",clip.id), args))
+  g.geom <- svg_node('g', g.view, c('fill'=as.rgb(col), 'clip-path'=sprintf("url(#%s)",clip.id), args[['g.args']]))
   
   for (i in seq_len(length(coords$x))){
-    if (!is.null(hovertext)){
+    if (!is.null(hovertext))
       hover.args <- c(onmouseover=sprintf("hovertext('%s',%s,%s)",hovertext[i],coords$x[i],coords$y[i]), onmouseout="hovertext(' ')") 
-    } else 
+    else 
       hover.args <- NULL
-    points_node(g.geom, coords$x[i], coords$y[i], pch, as.rgb(col), as.rgb(col), cex, lwd, hover.args)
+    if (length(args[['nd.args']]))
+      nd.args <- args[['nd.args']][[i]]
+    else 
+      nd.args <- NULL
+    points_node(g.geom, coords$x[i], coords$y[i], pch, as.rgb(col), as.rgb(col), cex, lwd, hover.args, nd.args)
   }
 }
 
 as.path <- function(x,y){
   paste0('M ',paste(x,y,sep=',',collapse=' L'), 'Z')
+}
+
+filter_dot_args <- function(...){
+  args.out <- list(nd.args=list(), g.args=c())
+  args <- list(...)
+  if (length(args)){
+    is.g <- which(unname(sapply(args, function(x) length(x)==1)))
+    args.out$g.args <- do.call(c, args[is.g])
+    
+    args[is.g] <- NULL
+    for (i in seq_len(length(args[[1]]))){
+      args.out$nd.args[[i]] <- sapply(args, function(x) x[i])
+    }
+  }
+
+  return(args.out)
 }
 points_node <- function(g, x, y, pch, col, bg, cex, lwd, ...){
   
