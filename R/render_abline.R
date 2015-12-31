@@ -8,13 +8,14 @@
 #' gs <- gsplot() %>% 
 #'    points(y=1:11, x=1:11, 
 #'             col="blue", pch=18, xlab='pizza', ylab='dogs') %>% 
-#'    abline(h=1:4)
+#'    abline(h=1:4, v=5:8)
 #' svg(gs)
 #' }
 #' @export
 render_abline <- function(g.view, a = NULL, b = NULL, h = NULL, v = NULL, reg = NULL, coef = NULL, untf = FALSE, 
                           lty=par("lty"), col=par("col"), lwd=par("lwd"), xlim, ylim, ...){
   
+  stopifnot(is.null(reg), is.null(coef), !untf)
   args <- filter_dot_args(...)
   view.bounds <- view_bounds(g.view)
   clip.id <- svg_id(g_mask(g.view))
@@ -33,9 +34,13 @@ render_abline <- function(g.view, a = NULL, b = NULL, h = NULL, v = NULL, reg = 
     for (i in seq_len(length(y))){
       svg_node('path', g.geom, c(d=sprintf('M %s,%s h %s',view.bounds[['x']], y[i], view.bounds[['width']]), nd_args(args,i)))
     }
-  } else {
-    message('these arguments are not currently supported for render_abline')
   }
   
+  if (!is.null(a) && !is.null(b)){
+    # // to do: check that a and b are length==1
+    y <- a+b*xlim
+    coords <- svg_coords(x=xlim, y, xlim, ylim, view.bounds)
+    svg_node('path', g.geom, c(d=sprintf('M %s,%s L %s,%s', coords$x[1],coords$y[1],coords$x[2],coords$y[2]), nd_args(args,i)))
+  }
   
 }
