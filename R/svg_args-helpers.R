@@ -17,3 +17,14 @@ filter_dot_args <- function(...){
 as.path <- function(x,y){
   paste0('M ',paste(x,y,sep=',',collapse=' L'), 'Z')
 }
+
+nd_args <- function(args, i=NULL){
+  if(length(args[['nd.args']]))
+    args[['nd.args']][[i]]
+  else
+    NULL
+}
+
+g_args <- function(args){
+  args[['g.args']]
+}
