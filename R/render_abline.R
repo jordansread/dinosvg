@@ -15,7 +15,7 @@
 render_abline <- function(g.view, a = NULL, b = NULL, h = NULL, v = NULL, reg = NULL, coef = NULL, untf = FALSE, 
                           lty=par("lty"), col=par("col"), lwd=par("lwd"), xlim, ylim, ...){
   
-  stopifnot(is.null(reg), is.null(coef), !untf)
+  stopifnot(is.null(reg), !untf)
   args <- filter_dot_args(...)
   view.bounds <- view_bounds(g.view)
   clip.id <- svg_id(g_mask(g.view))
@@ -36,6 +36,12 @@ render_abline <- function(g.view, a = NULL, b = NULL, h = NULL, v = NULL, reg = 
     }
   }
   
+  if (!is.null(coef)){
+    if (!is.null(a) && !is.null(b))
+      warning("render_abline: 'a' and 'b' are overridden by 'coef'", call.=FALSE)
+    a <- coef[1]
+    b <- coef[2]
+  }
   if (!is.null(a) && !is.null(b)){
     # // to do: check that a and b are length==1
     y <- a+b*xlim

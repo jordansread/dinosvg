@@ -2,6 +2,7 @@
 
 S3method(svg,gsplot)
 export(init_svg)
+export(render_abline)
 export(svg)
 import(gsplot)
 importFrom(XML,newXMLCDataNode)

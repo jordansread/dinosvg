@@ -6,9 +6,11 @@ filter_dot_args <- function(...){
     args.out$g.args <- do.call(c, args[is.g])
     
     args[is.g] <- NULL
-    for (i in seq_len(length(args[[1]]))){
-      args.out$nd.args[[i]] <- sapply(args, function(x) x[i])
-    }
+    if (length(args)){
+      for (i in seq_len(length(args[[1]]))){
+        args.out$nd.args[[i]] <- sapply(args, function(x) x[i])
+      }
+    } #// else no nd.args present
   }
   
   return(args.out)
