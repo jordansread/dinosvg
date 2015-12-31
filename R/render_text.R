@@ -9,17 +9,17 @@ render_text <- function(g.view, x, y = NULL, labels = seq_along(x), adj = NULL,
   
   coords <- svg_coords(x, y, xlim, ylim, view.bounds = view.bounds)
   for (i in seq_len(length(coords$x))){
-    svg_node("text", g.text, c(x=coords$x[i], y=coords$y[i], as.pos(pos), nd_args(args)), newXMLTextNode(labels[i]))  
+    svg_node("text", g.text, c(x=coords$x[i], y=coords$y[i], as.pos(pos, offset), nd_args(args)), newXMLTextNode(labels[i]))  
   }
   
 }
 
-as.pos <- function(pos){
+as.pos <- function(pos, offset){
   #// to do: dx and dy should be aligned w/ offset
   switch(pos,
-         '1'=c('text-anchor'='middle',dy='1.0em'), #below
-         '2'=c('text-anchor'='end',dy='0.33em', dx='0.5em'), #to left of
-         '3'=c('text-anchor'='middle',dy='-0.5em'), #above
-         '4'=c('text-anchor'='start',dy='0.33em', dx='0.5em')) #to right of
+         '1'=c('text-anchor'='middle',dy=sprintf("%1.1fem",1.0+offset)), #below
+         '2'=c('text-anchor'='end',dy='0.33em', dx=sprintf('%1.1fem',offset)), #to left of
+         '3'=c('text-anchor'='middle',dy=sprintf("%1.1fem",-0.5-offset)), #above
+         '4'=c('text-anchor'='start',dy='0.33em', dx=sprintf('%1.1fem',offset))) #to right of
   
 }
