@@ -15,7 +15,6 @@ render_text <- function(g.view, x, y = NULL, labels = seq_along(x), adj = NULL,
 }
 
 as.pos <- function(pos, offset){
-  #// to do: dx and dy should be aligned w/ offset
   switch(pos,
          '1'=c('text-anchor'='middle',dy=sprintf("%1.1fem",1.0+offset)), #below
          '2'=c('text-anchor'='end',dy='0.33em', dx=sprintf('%1.1fem',offset)), #to left of
