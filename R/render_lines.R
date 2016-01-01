@@ -5,8 +5,8 @@ render_lines <- function(g.view, x, y, pch=par("pch"), lty=par("lty"), col=par("
   coords <- svg_coords(x, y, xlim, ylim, view.bounds)
   clip.id <- svg_id(g_mask(g.view))
   
-  g.geom <- svg_node('g', g.view, c('stroke'=as.rgb(col), as.lty(lty), 'clip-path'=sprintf("url(#%s)",clip.id), args))
+  g.geom <- svg_node('g', g.view, c('stroke'=as.rgb(col), as.lty(lty), 'clip-path'=sprintf("url(#%s)",clip.id)))
 
   path <- paste0('M',paste(coords$x, coords$y,sep=',', collapse=' '))
-  svg_node('path', g.geom, c(d=path))
+  svg_node('path', g.geom, c(d=path, args))
 }
