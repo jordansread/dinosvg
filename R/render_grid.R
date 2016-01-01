@@ -16,9 +16,10 @@ render_grid <- function(g.view, nx = NULL, ny = nx, col = "lightgray", lty = "do
   
   # y
   if (is.null(ny)){
-    addChildren(g.geom, kids=lapply(tick_location(g.view, 'y'), function(x) {
-      newXMLNode('path', attrs=c(d=sprintf('M %s,%s h %s',view.bounds[['x']], x, view.bounds[['width']]), nd_args(args)))
-      }))
+    y <- tick_location(g.view, 'y')
+    for (i in seq_len(length(y))){
+      svg_node('path', g.geom, c(d=sprintf('M %s,%s h %s',view.bounds[['x']], y[i], view.bounds[['width']])))
+    }
   } else if (!is.na(ny) && ny > 0){
     message('these arguments are not currently supported for render_grid')
   }
