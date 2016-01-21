@@ -6,8 +6,13 @@
 \usage{
 svg(object, ...)
 }
+\arguments{
+\item{object}{a gsplot object}
+
+\item{\dots}{additional args passed to \code{svg.gsplot}}
+}
 \description{
-render svg
+create svg document from gsplot object
 }
 \examples{
 \dontrun{

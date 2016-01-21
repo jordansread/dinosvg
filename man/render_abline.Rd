@@ -8,6 +8,35 @@ render_abline(g.view, a = NULL, b = NULL, h = NULL, v = NULL,
   reg = NULL, coef = NULL, untf = FALSE, lty = par("lty"),
   col = par("col"), lwd = par("lwd"), xlim, ylim, ...)
 }
+\arguments{
+\item{g.view}{an xml node that defines the \code{view} for abline}
+
+\item{a}{the intercept}
+
+\item{b}{the slope}
+
+\item{h}{the y-value(s) for horizontal line(s).}
+
+\item{v}{the x-value(s) for vertical line(s).}
+
+\item{reg}{not supported}
+
+\item{coef}{a vector of length two giving the intercept and slope.}
+
+\item{untf}{not supported}
+
+\item{lty}{line type of line(s) (passed to \code{as.lty})}
+
+\item{col}{color of line(s)}
+
+\item{lwd}{line width NOT YET IMPLEMENTED}
+
+\item{xlim}{limits of x coordinate reference}
+
+\item{ylim}{limits of y coordinate reference}
+
+\item{\dots}{additional arguments passed to 'g' node or ablines individually}
+}
 \description{
 creates abline elements using the syntax of \code{\link[graphics]{abline}}
 }

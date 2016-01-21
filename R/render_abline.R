@@ -2,6 +2,21 @@
 #' 
 #' creates abline elements using the syntax of \code{\link[graphics]{abline}}
 #' 
+#' @param g.view an xml node that defines the \code{view} for abline
+#' @param a the intercept
+#' @param b the slope
+#' @param h the y-value(s) for horizontal line(s).
+#' @param v the x-value(s) for vertical line(s).
+#' @param reg not supported
+#' @param coef a vector of length two giving the intercept and slope.
+#' @param untf not supported
+#' @param lty line type of line(s) (passed to \code{as.lty})
+#' @param col color of line(s)
+#' @param lwd line width NOT YET IMPLEMENTED
+#' @param xlim limits of x coordinate reference
+#' @param ylim limits of y coordinate reference
+#' @param \dots additional arguments passed to 'g' node or ablines individually
+#' 
 #' @examples 
 #' \dontrun{
 #' library(gsplot)
