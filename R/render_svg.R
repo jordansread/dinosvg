@@ -31,6 +31,8 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
   svg <- init_svg(width, height, ...)
   add_css(svg)
   
+  # can add gsplot dinosvg section to object before all this, would would contain shared components
+  
   for (view in gsplot:::views(object)){
     par(par(object)) # set global par to object par
     render_view(svg, view)
