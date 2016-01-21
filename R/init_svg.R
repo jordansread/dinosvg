@@ -12,9 +12,3 @@ init_svg <- function(width, height, ...){
   invisible(svg)
 }
 
-#' @importFrom XML saveXML
-write_svg <- function(svg, file){
-  
-  saveXML(svg, file = file)
-  invisible(file)
-}

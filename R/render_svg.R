@@ -25,7 +25,8 @@ svg <- function(object, ...){
 }
 
 #' @export
-svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, pointsize = 12, ...){
+#' @importFrom XML toString.XMLNode
+svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, pointsize = 12, as.string=FALSE, ...){
 
   svg <- init_svg(width, height, ...)
   add_css(svg)
@@ -41,6 +42,10 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
   # build axes
   # do.call for gsplot elements, skip those w/o `svg_` functions and warn
   # invisible return of filename
+  
+  if (as.string){
+    return(toString.XMLNode(svg))
+  }
   return(write_svg(svg, file))
 }
 
@@ -66,5 +71,12 @@ xpath_one <- function(svg, xpath){
 svg_node <- function(name, parent, attrs=NULL, ...){
   invisible(newXMLNode(name = name, parent = parent,
              attrs=attrs, ...))
+}
+
+#' @importFrom XML saveXML
+write_svg <- function(svg, file){
+  
+  saveXML(svg, file = file)
+  invisible(file)
 }
 
