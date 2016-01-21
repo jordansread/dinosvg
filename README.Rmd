@@ -14,7 +14,7 @@ output:
 ### rendering svgs
 
 create a plot with `gsplot`
-```{r}
+```{r, warning=FALSE}
 library(gsplot)
 gs <- gsplot() %>% 
   points(y=1:11, x=1:11, 
@@ -26,7 +26,7 @@ gs <- gsplot() %>%
 gs
 ```
 
-```{r, results='asis', warning=T}
+```{r, results='asis'}
 library(dinosvg)
 gs <- gsplot() %>% 
   points(y=1:11, x=1:11, 
