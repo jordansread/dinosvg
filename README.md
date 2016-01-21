@@ -3,6 +3,8 @@
 
 ### purpose of package
 
+`dinsvg` is a work in progress, but is designed to support structured `svg` output from the [gsplot package](https://github.com/USGS-R/gsplot). The package also has a few annotation pieces built in, limited right now to `hovertext`.
+
 ### rendering svgs
 
 create a plot with `gsplot`
