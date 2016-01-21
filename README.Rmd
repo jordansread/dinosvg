@@ -26,7 +26,7 @@ gs <- gsplot() %>%
 gs
 ```
 
-```{r, results='asis'}
+```{r, results='markup'}
 library(dinosvg)
 gs <- gsplot() %>% 
   points(y=1:11, x=1:11, 
