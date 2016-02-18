@@ -24,7 +24,8 @@ gs <- gsplot() \%>\%
    points(x=4:11, y=11:4, 
             col="red", pch=1, hovertext=paste0('text:',11:4)) \%>\% 
    points(3:5,4:6,side=c(1,4), col='green', hovertext='green', pch=14, ylab='cats') \%>\% 
-   lines(2:4, c(2,2.6,2.3), col='blue')
+   lines(2:4, c(2,2.6,2.3), col='blue') \%>\% 
+   axis(side=1, at = c(3,6.5,8.6))
 svg(gs)
 }
 }
