@@ -42,7 +42,14 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
 #   for (side in gsplot:::sides(object)){
 #     render_side(svg, side)
 #   }
-  add_tooltip(svg)
+  tick.len <- 5
+  window <- object$view.1.2$window
+  g.view <- g_view(svg,window[['side']])
+  g.axes <- g_axes(g.view)
+  view.bounds <- view_bounds(g.view)
+  
+  render_x_axis(g.axes, side=1, at=object$axis$arguments$at, labels=object$axis$arguments$labels, lim=window$xlim, view.bounds = view.bounds, tick.len = tick.len, axis.label=window$xlab)
+  #add_tooltip(svg)
   add_ecmascript(svg, ecmascript.text=object$ecmascript)
   # get par
   # set the page dimensions
@@ -54,7 +61,9 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
   if (as.string){
     return(toString.XMLNode(svg))
   }
-  return(write_svg(svg, file))
+  write_svg(svg, file)
+  base::rm(svg)
+  return(file)
 }
 
 
@@ -81,7 +90,7 @@ svg_node <- function(name, parent, attrs=NULL, ...){
              attrs=attrs, ...))
 }
 
-#' @importFrom XML saveXML
+#' @importFrom XML saveXML 
 write_svg <- function(svg, file){
   
   saveXML(svg, file = file)

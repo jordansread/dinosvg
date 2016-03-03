@@ -7,7 +7,7 @@ render_axis <- function(g.axes, side, at=NULL, lim, view.bounds, tick.len, ...){
   do.call(sprintf('render_axis_%s', side), list(g.axis, at=at, lim=lim, view.bounds = view.bounds, tick.len = tick.len, ...))
 }
 
-render_x_axis <- function(g.axis, side, at=NULL, lim, view.bounds, tick.len, axis.label, ...){
+render_x_axis <- function(g.axis, side, at=NULL, labels=at, lim, view.bounds, tick.len, axis.label, ...){
 
  x <- svg_coords(x=at, xlim=lim, view.bounds=view.bounds)$x
  y <- c(view.bounds[['y']] + view.bounds[['height']], NA, view.bounds[['y']])
@@ -19,7 +19,7 @@ render_x_axis <- function(g.axis, side, at=NULL, lim, view.bounds, tick.len, axi
  ticks <- svg_node('g', g.axis, c(id='ticks'))
  for (i in seq_len(length(at))){
    svg_node("path", ticks, c(d=sprintf('M %s,%s v %s',x[i], y[side], tick.len[side])))
-   svg_node("text", tick.labels, c(x=x[i], y=y[side], dy=tck.dy[side]), newXMLTextNode(at[i]))
+   svg_node("text", tick.labels, c(x=x[i], y=y[side], dy=tck.dy[side]), newXMLTextNode(labels[i]))
  }
  
  if (!missing(axis.label) & axis.label != ''){

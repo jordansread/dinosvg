@@ -12,7 +12,7 @@ render_view <- function(svg, view){
   
   tick.len <- 5
   
-  render_axis(g.axes, window[['side']][1], lim=window$xlim, view.bounds = view.bounds, tick.len = tick.len, axis.label=window$xlab)
+  #render_axis(g.axes, window[['side']][1], lim=window$xlim, view.bounds = view.bounds, tick.len = tick.len, axis.label=window$xlab)
   render_axis(g.axes, window[['side']][2], lim=window$ylim, view.bounds = view.bounds, tick.len = tick.len, axis.label=window$ylab)
   
   render_geoms(g.view, geoms, window)
