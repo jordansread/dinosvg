@@ -30,7 +30,7 @@ svg <- function(object, ...){
 svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, pointsize = 12, as.string=FALSE, ...){
 
   svg <- init_svg(width, height, ...)
-  add_css(svg)
+  add_css(svg, css.text=object$css)
   
   # can add gsplot dinosvg section to object before all this, would would contain shared components
   
@@ -43,6 +43,7 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
 #     render_side(svg, side)
 #   }
   add_tooltip(svg)
+  add_ecmascript(svg, ecmascript.text=object$ecmascript)
   # get par
   # set the page dimensions
   # translate coordinates
