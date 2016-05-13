@@ -17,10 +17,9 @@ render_view <- function(svg, object, view.name){
   par(old.par)
 }
 
-
 #' @importFrom XML newXMLTextNode
 render_window <- function(svg, view, side){
-  
+
   ax <- svg_view_bounds(svg, mai=par()$mai)
   
   

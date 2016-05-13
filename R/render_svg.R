@@ -39,14 +39,14 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
     render_view(svg, object, view.name)
   }
   
-  for (side.name in gsplot:::side_names(object)){
-    render_side(svg, side)
-  }
-  tick.len <- 5
-  window <- object$view.1.2$window
-  g.view <- g_view(svg,window[['side']])
-  g.axes <- g_axes(g.view)
-  view.bounds <- view_bounds(g.view)
+  # for (side.name in gsplot:::side_names(object)){
+  #   render_side(svg, side)
+  # }
+  # tick.len <- 5
+  # window <- object$view.1.2$window
+  # g.view <- g_view(svg,window[['side']])
+  # g.axes <- g_axes(g.view)
+  # view.bounds <- view_bounds(g.view)
   
   
   #add_tooltip(svg)
