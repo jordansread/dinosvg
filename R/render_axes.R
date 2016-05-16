@@ -7,6 +7,7 @@ render_axis <- function(g.axes, side, at=NULL, lim, view.bounds, tick.len, ...){
 
 render_x_axis <- function(g.axis, side, at=NULL, labels=at, lim, view.bounds, tick.len, axis.label, las=par('las'), ...){
 
+  args <- filter_dot_args(...)
  x <- svg_coords(x=at, xlim=lim, view.bounds=view.bounds)$x
  y <- c(view.bounds[['y']] + view.bounds[['height']], NA, view.bounds[['y']])
  tick.len <- c(-tick.len, NA, tick.len)
@@ -51,7 +52,7 @@ render_x_axis <- function(g.axis, side, at=NULL, labels=at, lim, view.bounds, ti
      if (length(labels) == 1 && !labels){
        
      } else {
-       svg_node("text", tick.labels, c(get_position(x=x[i], y=y[side], las, side)), newXMLTextNode(labels[i]))
+       svg_node("text", tick.labels, c(get_position(x=x[i], y=y[side], las, side), nd_args(args,i)), newXMLTextNode(labels[i]))
      }
      
    }
