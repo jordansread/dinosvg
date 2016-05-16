@@ -13,6 +13,6 @@ render_rect <- function(g.view, xleft, ybottom, xright, ytop, density=NULL, angl
   g.geom <- svg_node('g', g.view, c('clip-path'=sprintf("url(#%s)",clip.id), g_args(args)))
   
   for (i in seq_along(xleft)){
-    svg_node('rect', g.geom, c(x=coords$x[i], y=coords$y[i], height=height[i],width=width[i], 'fill'=as.rgb(col[i])))
+    svg_node('rect', g.geom, c(x=coords$x[i], y=coords$y[i], height=height[i],width=width[i], 'fill'=as.rgb(col[i]), nd_args(args,i)))
   }
 }

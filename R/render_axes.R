@@ -1,6 +1,4 @@
 render_axis <- function(g.axes, side, at=NULL, lim, view.bounds, tick.len, ...){
-  if (is.null(at))
-    at <- pretty(lim)
   
   at <- at[at >= min(lim) & at <= max(lim)]
   g.axis <- svg_node('g', g.axes, c(id=sprintf('axis-side-%s', side)))
@@ -45,12 +43,20 @@ render_x_axis <- function(g.axis, side, at=NULL, labels=at, lim, view.bounds, ti
    
  }
  
- tick.labels <- svg_node('g', g.axis, c(id='tick-labels', stroke='none',fill='#000000', 'text-anchor'=get_anchor(las, side)))
- ticks <- svg_node('g', g.axis, c(id='ticks'))
- for (i in seq_len(length(at))){
-   svg_node("path", ticks, c(d=sprintf('M %s,%s v %s',x[i], y[side], tick.len[side])))
-   svg_node("text", tick.labels, c(get_position(x=x[i], y=y[side], las, side)), newXMLTextNode(labels[i]))
+ if (!is.null(at)){
+   tick.labels <- svg_node('g', g.axis, c(id='tick-labels', stroke='none',fill='#000000', 'text-anchor'=get_anchor(las, side)))
+   ticks <- svg_node('g', g.axis, c(id='ticks'))
+   for (i in seq_len(length(at))){
+     svg_node("path", ticks, c(d=sprintf('M %s,%s v %s',x[i], y[side], tick.len[side])))
+     if (length(labels) == 1 && !labels){
+       
+     } else {
+       svg_node("text", tick.labels, c(get_position(x=x[i], y=y[side], las, side)), newXMLTextNode(labels[i]))
+     }
+     
+   }
  }
+ 
  
  if (!missing(axis.label) & axis.label != ''){
    a.axis.label <- svg_node('g', g.axis, c(id='axis-label', stroke='none',fill='#000000', 'text-anchor'="middle"))
