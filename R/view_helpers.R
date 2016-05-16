@@ -6,7 +6,7 @@ svg_view_bounds <- function(svg, mai){
   view.box <- strsplit(xmlAttrs(svg)[['viewBox']],'[ ]')[[1]] %>% 
     as.numeric()
   
-  c(x = view.box[1]+mar[2], y = view.box[2]+mar[2], 
+  c(x = view.box[1]+mar[2], y = view.box[2]+mar[3], 
     width = view.box[3]-mar[2]-mar[4], 
     height = view.box[4]-mar[1]-mar[3])
 }
