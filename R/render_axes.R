@@ -7,7 +7,7 @@ render_axis <- function(g.axes, side, at=NULL, lim, view.bounds, tick.len, ...){
   do.call(sprintf('render_axis_%s', side), list(g.axis, at=at, lim=lim, view.bounds = view.bounds, tick.len = tick.len, ...))
 }
 
-render_x_axis <- function(g.axis, side, at=NULL, labels=at, lim, view.bounds, tick.len, axis.label, ...){
+render_x_axis <- function(g.axis, side, at=NULL, labels=at, lim, view.bounds, tick.len, axis.label, las=par('las'), ...){
 
  x <- svg_coords(x=at, xlim=lim, view.bounds=view.bounds)$x
  y <- c(view.bounds[['y']] + view.bounds[['height']], NA, view.bounds[['y']])
@@ -15,11 +15,41 @@ render_x_axis <- function(g.axis, side, at=NULL, labels=at, lim, view.bounds, ti
  tck.dy <- c('1.0em', NA, '-0.33em')
  lab.dy <- c('2.0em', NA, '-1.33em')
  
- tick.labels <- svg_node('g', g.axis, c(id='tick-labels', stroke='none',fill='#000000', 'text-anchor'="middle"))
+ get_anchor <- function(las, side){
+   if (is.null(las)){
+     las = par('las',side)
+   }
+   if (las == 0 || las == 1){
+     return('middle')
+   } else{
+     if (side == 1)
+       return("end")
+     else 
+       return('begin')
+   }
+ }
+ 
+ get_position <- function(x,y, las, side){
+   if (is.null(las)){
+     las = par('las',side)
+   }
+   if (las == 0 || las == 1){
+     return(c(x=x, y=y, dy=tck.dy[side]))
+   } else{
+     if (side == 1)
+       return(c(dy="0.33em", dx="-0.33em", transform=sprintf("translate(%s,%s) rotate(-90)", x,y)))
+     else 
+       return(c(dy="-0.33em", dx="0.33em", transform=sprintf("translate(%s,%s) rotate(90)", x,y)))
+   }
+   
+   
+ }
+ 
+ tick.labels <- svg_node('g', g.axis, c(id='tick-labels', stroke='none',fill='#000000', 'text-anchor'=get_anchor(las, side)))
  ticks <- svg_node('g', g.axis, c(id='ticks'))
  for (i in seq_len(length(at))){
    svg_node("path", ticks, c(d=sprintf('M %s,%s v %s',x[i], y[side], tick.len[side])))
-   svg_node("text", tick.labels, c(x=x[i], y=y[side], dy=tck.dy[side]), newXMLTextNode(labels[i]))
+   svg_node("text", tick.labels, c(get_position(x=x[i], y=y[side], las, side)), newXMLTextNode(labels[i]))
  }
  
  if (!missing(axis.label) & axis.label != ''){
