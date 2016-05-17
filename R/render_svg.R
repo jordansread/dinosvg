@@ -27,7 +27,7 @@ svg <- function(object, ...){
 
 #' @export
 #' @importFrom XML toString.XMLNode
-svg.XMLInternalNode <- function(object, gsplot.object, file = "Rplot.svg", ...){
+svg.XMLInternalNode <- function(object, gsplot.object, file = "Rplot.svg", as.xml=FALSE, ...){
   
   svg <- object
   object <- gsplot.object
@@ -38,6 +38,10 @@ svg.XMLInternalNode <- function(object, gsplot.object, file = "Rplot.svg", ...){
   
   for (side.name in gsplot:::side_names(object)){
     render_side(svg, object, side.name)
+  }
+  
+  if (as.xml){
+    return(svg)
   }
   write_svg(svg, file)
   return(file)
