@@ -47,5 +47,4 @@ add_tooltip <- function(svg, dx="0.2em", dy='-0.2em',fill="#000000"){
   \t}
   }'
   add_ecmascript(svg, ecmascript.text = tool_fun)
-  svg_node("script", svg, attrs=c(type="text/ecmascript"), newXMLCDataNode(tool_fun))
 }
