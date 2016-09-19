@@ -1,9 +1,17 @@
 #' @export
-render_view <- function(svg, object, view.name){
+render_view <- function(svg, object, view.name, ...){
   view <- object[[view.name]]
   geoms <- view
   geoms[['par']] <- NULL
-  old.par <- par(view[['par']])
+  old.par <- par(view[['par']]) # need side par too!
+  x = svglite::xmlSVG({
+    plot.new()
+    gsplot:::set_frame(object, view.name)
+    gsplot:::print.view(view)
+  }, ...)
+  clip.path <- xml2::xml_find_first(x, '//defs/clipPath')
+  xml_attr(clip.path, 'id') <- 'mask-1-2'
+  xml_add_child(svg, clip.path, id='newLCICOC')
   x.side <- gsplot:::as.x_side(view.name)
   y.side <- gsplot:::as.y_side(view.name)
   xlim <- xlim(object, side = x.side)
