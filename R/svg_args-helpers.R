@@ -5,6 +5,10 @@ filter_dot_args <- function(...){
     is.g <- which(unname(sapply(args, function(x) length(x)==1)))
     args.out$g.args <- do.call(c, args[is.g])
     
+    if (is.null(args.out$g.args)){
+      args.out$g.args <- list() # so that a NULL node isn't added. 
+    }
+    
     args[is.g] <- NULL
     if (length(args)){
       for (i in seq_len(length(args[[1]]))){
@@ -24,7 +28,7 @@ nd_args <- function(args, i=NULL){
   if(length(args[['nd.args']]))
     args[['nd.args']][[i]]
   else
-    NULL
+    args[['nd.args']]
 }
 
 g_args <- function(args){

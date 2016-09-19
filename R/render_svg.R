@@ -27,28 +27,6 @@ svg <- function(object, ...){
 
 #' @export
 #' @importFrom XML toString.XMLNode
-svg.XMLInternalNode <- function(object, gsplot.object, file = "Rplot.svg", as.xml=FALSE, ...){
-  
-  svg <- object
-  object <- gsplot.object
-  for (view.name in gsplot:::view_names(object)){
-    par(par(object)) # set global par to object par
-    render_view(svg, object, view.name)
-  }
-  
-  for (side.name in gsplot:::side_names(object)){
-    render_side(svg, object, side.name)
-  }
-  
-  if (as.xml){
-    return(svg)
-  }
-  write_svg(svg, file)
-  return(file)
-}
-
-#' @export
-#' @importFrom XML toString.XMLNode
 svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, pointsize = 12, as.string=FALSE, as.xml=FALSE, ...){
 
   svg <- init_svg(width, height, ...)
@@ -76,7 +54,6 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
     return(svg)
   }
   write_svg(svg, file)
-  base::rm(svg)
   return(file)
 }
 
@@ -99,10 +76,10 @@ svg_node <- function(name, parent, ...){
   invisible(xml_add_child(parent, name, ...))
 }
 
-#' @importFrom XML saveXML 
+#' @importFrom xml2 write_xml
 write_svg <- function(svg, file){
   
-  saveXML(svg, file = file)
+  write_xml(svg, file = file)
   invisible(file)
 }
 

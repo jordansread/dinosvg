@@ -1,8 +1,8 @@
 Package: dinosvg
 Type: Package
 Title: Create dynamic SVGs from scratch
-Version: 0.2.1
-Date: 2015-02-25
+Version: 0.3.0
+Date: 2016-09-19
 Author: Jordan S Read
 Maintainer: Jordan S Read <jread@usgs.gov>
 Description: Build SVGs as part of xml manipulation. Add scripts and CSS in-
@@ -15,6 +15,7 @@ Copyright: This software is in the public domain because it contains materials
     http://www.usgs.gov/visual-id/credit_usgs.html#copyright
 Imports:
     XML,
+    xml2,
     gsplot (>= 0.6.1)
 Suggests:
     testthat,

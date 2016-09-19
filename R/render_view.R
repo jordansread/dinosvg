@@ -13,7 +13,7 @@ render_view <- function(svg, object, view.name){
   g.view <- g_view(svg, c(x.side, y.side))
   g.axes <- g_axes(g.view)
 
-  render_geoms(g.view, geoms, object, xlim, ylim)
+  # render_geoms(g.view, geoms, object, xlim, ylim)
   par(old.par)
 }
 

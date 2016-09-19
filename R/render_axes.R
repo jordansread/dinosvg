@@ -1,7 +1,7 @@
 render_axis <- function(g.axes, side, at=NULL, lim, view.bounds, tick.len, ...){
   
   at <- at[at >= min(lim) & at <= max(lim)]
-  g.axis <- svg_node('g', g.axes, c(id=sprintf('axis-side-%s', side)))
+  g.axis <- svg_node('g', g.axes, id=sprintf('axis-side-%s', side))
   do.call(sprintf('render_axis_%s', side), list(g.axis, at=at, lim=lim, view.bounds = view.bounds, tick.len = tick.len, ...))
 }
 
@@ -9,7 +9,7 @@ render_x_axis <- function(g.axis, side, at=NULL, labels=at, lim, view.bounds, ti
 
   args <- filter_dot_args(...)
  x <- svg_coords(x=at, xlim=lim, view.bounds=view.bounds)$x
- y <- c(view.bounds[['y']] + view.bounds[['height']], NA, view.bounds[['y']])
+ y <- as.character(c(view.bounds[['y']] + view.bounds[['height']], NA, view.bounds[['y']]))
  tick.len <- c(-tick.len, NA, tick.len)
  tck.dy <- c('1.0em', NA, '-0.33em')
  lab.dy <- c('2.0em', NA, '-1.33em')
@@ -45,14 +45,14 @@ render_x_axis <- function(g.axis, side, at=NULL, labels=at, lim, view.bounds, ti
  }
  
  if (!is.null(at)){
-   tick.labels <- svg_node('g', g.axis, c(id='tick-labels', stroke='none',fill='#000000', 'text-anchor'=get_anchor(las, side)))
-   ticks <- svg_node('g', g.axis, c(id='ticks'))
+   tick.labels <- svg_node('g', g.axis, id='tick-labels', stroke='none',fill='#000000', 'text-anchor'=get_anchor(las, side))
+   ticks <- svg_node('g', g.axis, id='ticks', fill="none", stroke="#000000", `stroke-width`="1")
    for (i in seq_len(length(at))){
-     svg_node("path", ticks, c(d=sprintf('M %s,%s v %s',x[i], y[side], tick.len[side])))
+     svg_node("path", ticks, d=sprintf('M %s,%s v %s',x[i], y[side], tick.len[side]))
      if (length(labels) == 1 && !labels){
        
      } else {
-       svg_node("text", tick.labels, c(get_position(x=x[i], y=y[side], las, side), nd_args(args,i)), newXMLTextNode(labels[i]))
+       svg_node("text", tick.labels, c(get_position(x=x[i], y=y[side], las, side), nd_args(args,i)), labels[i])
      }
      
    }
@@ -60,8 +60,8 @@ render_x_axis <- function(g.axis, side, at=NULL, labels=at, lim, view.bounds, ti
  
  
  if (!missing(axis.label) & axis.label != ''){
-   a.axis.label <- svg_node('g', g.axis, c(id='axis-label', stroke='none',fill='#000000', 'text-anchor'="middle"))
-   svg_node("text", a.axis.label, c(x=as.crd(view.bounds[['x']]+view.bounds[['width']]/2), y=y[side], dy=lab.dy[side]), newXMLTextNode(axis.label))  
+   a.axis.label <- svg_node('g', g.axis, id='axis-label', stroke='none',fill='#000000', 'text-anchor'="middle")
+   svg_node("text", a.axis.label, x=as.crd(view.bounds[['x']]+view.bounds[['width']]/2), y=y[side], dy=lab.dy[side], axis.label)
  }
 }
 

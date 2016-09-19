@@ -1,5 +1,5 @@
 #' @export
-#' @importFrom xml2 xml_new_document xml_attrs
+#' @importFrom xml2 xml_new_document xml_attrs<-
 init_svg <- function(width, height, ...){
   
   

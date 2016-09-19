@@ -1,4 +1,4 @@
-render_points <- function(g.view, x, y, pch=par("pch"), col=par("col"), bg="#FFFFFF00", cex=1, lwd=par("lwd"), xlim, ylim, hovertext=NULL, ...){
+render_points <- function(g.view, x, y, pch=par("pch"), col=par("col"), bg="#FFFFFF00", cex=1, lwd=par("lwd"), xlim, ylim, ...){
   args <- filter_dot_args(...)
   view.bounds <- view_bounds(g.view)
   
@@ -6,19 +6,11 @@ render_points <- function(g.view, x, y, pch=par("pch"), col=par("col"), bg="#FFF
   
   clip.id <- svg_id(g_mask(g.view))
   
-  if (!is.null(hovertext) & length(hovertext) == 1){
-    hovertext <- rep(hovertext, length(coords$x))
-  }
-  
   pch <- as.character(pch)
-  g.geom <- svg_node('g', g.view, c('fill'=as.rgb(col), 'clip-path'=sprintf("url(#%s)",clip.id), g_args(args)))
+  g.geom <- svg_node('g', g.view, 'fill'=as.rgb(col), 'clip-path'=sprintf("url(#%s)",clip.id), g_args(args))
   
   for (i in seq_len(length(coords$x))){
-    if (!is.null(hovertext))
-      hover.args <- c(onmouseover=sprintf("hovertext('%s',%s,%s)",hovertext[i],coords$x[i],coords$y[i]), onmouseout="hovertext(' ')") 
-    else 
-      hover.args <- NULL
-    points_node(g.geom, coords$x[i], coords$y[i], pch, as.rgb(col), as.rgb(col), cex, lwd, hover.args, nd_args(args,i))
+    points_node(g.geom, coords$x[i], coords$y[i], pch, as.rgb(col), as.rgb(col), cex, lwd, nd_args(args,i))
   }
 }
 
@@ -52,41 +44,41 @@ points_node <- function(g, x, y, pch, col, bg, cex, lwd, ...){
   transparent <- "#FFFFFF"
   # here, support multiple pch values w/ a switch
   node <- switch(pch,
-          '0' = svg_node('path', g, c(geoms[['square']], fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '1' = svg_node('circle', g, c(geoms[['circle']], fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '2' = svg_node('path', g, c(geoms[['up.tri']], fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '3' = svg_node('path', g, c(geoms[['cross']], fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '4' = svg_node('path', g, c(geoms[['x']], fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '5' = svg_node('path', g, c(geoms[['diamond']], fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '6' = svg_node('path', g, c(geoms[['dwn.tri']], fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '7' = svg_node('path', g, c(d=paste0(geoms[['square']][['d']],' ',geoms[['x']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '8' = svg_node('path', g, c(d=paste0(geoms[['cross']][['d']],' ',geoms[['x']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '9' = svg_node('path', g, c(d=paste0(geoms[['cross']][['d']],' ',geoms[['diamond']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '10' = svg_node('path', g, c(d=paste0(geoms[['sm.cross']][['d']],' ',geoms[['diamond']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '11' = svg_node('path', g, c(d=paste0(geoms[['up.tri']][['d']],' ',geoms[['dwn.tri']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '12' = svg_node('path', g, c(d=paste0(geoms[['sm.cross']][['d']],' ',geoms[['square']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '13' = svg_node('path', g, c(d=paste0(geoms[['x']][['d']],' ',geoms[['square']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...)), #needs path circle
-          '14' = svg_node('path', g, c(geoms[['tri.square']], fill=transparent, 'fill-opacity'="0", stroke=col, 'stroke-linejoin'="bevel", ...)),
-          '15' = svg_node('path', g, c(geoms[['square']], fill=col, stroke=col, ...)),
-          '16' = svg_node('circle', g, c(cx=x, cy=y, r=as.crd(cex*2.7), fill=col, stroke=col, ...)),
-          '17' = svg_node('path', g, c(geoms[['up.tri']], fill=col, stroke=col, ...)),
-          '18' = svg_node('path', g, c(geoms[['diamond']], fill=col, stroke=col, ...)),
-          '19' = svg_node('circle', g, c(geoms[['circle']], fill=col, stroke=col, ...)),
-          '20' = svg_node('circle', g, c(geoms[['sm.circle']], fill=col, stroke=col, ...)),
-          '21' = svg_node('circle', g, c(geoms[['circle']], fill=bg, stroke=col, ...)),
-          '22' = svg_node('path', g, c(geoms[['square']], fill=bg, stroke=col, ...)),
-          '23' = svg_node('path', g, c(geoms[['diamond']], fill=bg, stroke=col, ...)),
-          '24' = svg_node('path', g, c(geoms[['up.tri']], fill=bg, stroke=col, ...)),
-          '25' = svg_node('path', g, c(geoms[['dwn.tri']], fill=bg, stroke=col, ...)),
-          '.' = svg_node('circle', g, c(cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          'o' = svg_node('circle', g, c(cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '0' = svg_node('circle', g, c(cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          'O' = svg_node('circle', g, c(cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          'a' = svg_node('circle', g, c(cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          'A' = svg_node('circle', g, c(cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '*' = svg_node('circle', g, c(cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '+' = svg_node('circle', g, c(cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '-' = svg_node('circle', g, c(cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...)),
-          '|' = svg_node('circle', g, c(cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...)))
+          '0' = svg_node('path', g,  geoms[['square']], fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '1' = svg_node('circle', g,  geoms[['circle']], fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '2' = svg_node('path', g,  geoms[['up.tri']], fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '3' = svg_node('path', g,  geoms[['cross']], fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '4' = svg_node('path', g,  geoms[['x']], fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '5' = svg_node('path', g,  geoms[['diamond']], fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '6' = svg_node('path', g,  geoms[['dwn.tri']], fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '7' = svg_node('path', g,  d=paste0(geoms[['square']][['d']],' ',geoms[['x']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '8' = svg_node('path', g,  d=paste0(geoms[['cross']][['d']],' ',geoms[['x']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '9' = svg_node('path', g,  d=paste0(geoms[['cross']][['d']],' ',geoms[['diamond']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '10' = svg_node('path', g,  d=paste0(geoms[['sm.cross']][['d']],' ',geoms[['diamond']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '11' = svg_node('path', g,  d=paste0(geoms[['up.tri']][['d']],' ',geoms[['dwn.tri']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '12' = svg_node('path', g,  d=paste0(geoms[['sm.cross']][['d']],' ',geoms[['square']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '13' = svg_node('path', g,  d=paste0(geoms[['x']][['d']],' ',geoms[['square']][['d']]), fill=transparent, 'fill-opacity'="0", stroke=col, ...), #needs path circle
+          '14' = svg_node('path', g,  geoms[['tri.square']], fill=transparent, 'fill-opacity'="0", stroke=col, 'stroke-linejoin'="bevel", ...),
+          '15' = svg_node('path', g,  geoms[['square']], fill=col, stroke=col, ...),
+          '16' = svg_node('circle', g,  cx=x, cy=y, r=as.crd(cex*2.7), fill=col, stroke=col, ...),
+          '17' = svg_node('path', g,  geoms[['up.tri']], fill=col, stroke=col, ...),
+          '18' = svg_node('path', g,  d=geoms[['diamond']][['d']], fill=col, stroke=col),
+          '19' = svg_node('circle', g,  geoms[['circle']], fill=col, stroke=col, ...),
+          '20' = svg_node('circle', g,  geoms[['sm.circle']], fill=col, stroke=col, ...),
+          '21' = svg_node('circle', g,  geoms[['circle']], fill=bg, stroke=col, ...),
+          '22' = svg_node('path', g,  geoms[['square']], fill=bg, stroke=col, ...),
+          '23' = svg_node('path', g,  geoms[['diamond']], fill=bg, stroke=col, ...),
+          '24' = svg_node('path', g,  geoms[['up.tri']], fill=bg, stroke=col, ...),
+          '25' = svg_node('path', g,  geoms[['dwn.tri']], fill=bg, stroke=col, ...),
+          '.' = svg_node('circle', g,  cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          'o' = svg_node('circle', g,  cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '0' = svg_node('circle', g,  cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          'O' = svg_node('circle', g,  cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          'a' = svg_node('circle', g,  cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          'A' = svg_node('circle', g,  cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '*' = svg_node('circle', g,  cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '+' = svg_node('circle', g,  cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '-' = svg_node('circle', g,  cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...),
+          '|' = svg_node('circle', g,  cx=x, cy=y, r=as.crd(cex*2.7), fill=transparent, 'fill-opacity'="0", stroke=col, ...))
   invisible(node)
 }
