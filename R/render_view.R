@@ -1,3 +1,4 @@
+#' @export
 render_view <- function(svg, object, view.name){
   view <- object[[view.name]]
   geoms <- view
@@ -11,7 +12,6 @@ render_view <- function(svg, object, view.name){
   
   g.view <- g_view(svg, c(x.side, y.side))
   g.axes <- g_axes(g.view)
-  view.bounds <- view_bounds(g.view)
 
   render_geoms(g.view, geoms, object, xlim, ylim)
   par(old.par)
@@ -20,14 +20,14 @@ render_view <- function(svg, object, view.name){
 #' @importFrom XML newXMLTextNode
 render_window <- function(svg, view, side){
 
-  ax <- svg_view_bounds(svg, mai=par()$mai)
+  ax <- svg_view_bounds(svg, mai=par()$mai, as.numeric=FALSE)
+
+  g.view <- svg_node('g', svg, 'id'=sprintf('view-%s-%s', side[1], side[2]))
+  g.mask <- svg_node('clipPath',svg_node('defs',g.view), id=sprintf('mask-%s-%s', side[1], side[2]))
+  svg_node('rect', g.mask, x=ax[['x']], y=ax[['y']], height=ax[['height']], width=ax[['width']])
+  g.axes <- svg_node('g', g.view, 'id'="axes", 'fill'="none", 'stroke'="#000000", 'stroke-width'="1")
   
-  
-  g.view <- svg_node('g', svg, c('id'=sprintf('view-%s-%s', side[1], side[2])))
-  svg_node('rect', svg_node('clipPath',svg_node('defs',g.view), c(id=sprintf('mask-%s-%s', side[1], side[2]))), c(x=ax[['x']], y=ax[['y']], height=ax[['height']], width=ax[['width']]))
-  g.axes <- svg_node('g', g.view, c('id'="axes", 'fill'="none", 'stroke'="#000000", 'stroke-width'="1"))
-  
-  svg_node('rect', g.axes, c(x=ax[['x']], y=ax[['y']], height=ax[['height']], width=ax[['width']], id='axes-box'))
+  svg_node('rect', g.axes, x=ax[['x']], y=ax[['y']], height=ax[['height']], width=ax[['width']], id='axes-box')
 }
 
 render_geoms <- function(g.view, geoms, object, xlim, ylim){

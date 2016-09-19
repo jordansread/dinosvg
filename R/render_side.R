@@ -1,3 +1,4 @@
+#' @export
 render_side <- function(svg, object, side.name){
   side <- object[[side.name]]
   side.num <- gsplot:::as.side(side.name)

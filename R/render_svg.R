@@ -52,7 +52,6 @@ svg.XMLInternalNode <- function(object, gsplot.object, file = "Rplot.svg", as.xm
 svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, pointsize = 12, as.string=FALSE, as.xml=FALSE, ...){
 
   svg <- init_svg(width, height, ...)
-  add_css(svg, css.text=object$css)
   
   # can add gsplot dinosvg section to object before all this, would would contain shared components
   
@@ -71,15 +70,6 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
   # view.bounds <- view_bounds(g.view)
   
   
-  #add_tooltip(svg)
-  add_ecmascript(svg, ecmascript.text=object$ecmascript)
-  # get par
-  # set the page dimensions
-  # translate coordinates
-  # build axes
-  # do.call for gsplot elements, skip those w/o `svg_` functions and warn
-  # invisible return of filename
-  
   if (as.string){
     return(toString.XMLNode(svg))
   } else if (as.xml){
@@ -92,26 +82,21 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
 
 
 
-#' @importFrom XML xmlAttrs
+#' @importFrom xml2 xml_attr
 svg_id <- function(ele){
-  xmlAttrs(ele)[[1]]
+  xml_attr(ele,'id')
 }
 
 
+#' @importFrom xml2 xml_find_first
 xpath_one <- function(svg, xpath){
-  nodes <- xpathApply(svg, xpath)
-  
-  if (length(nodes) > 1)
-    stop('more than one element found for ', xpath)
-
-  return(nodes[[1]])
+  xml_find_first(svg, xpath)
 }
 
 
-#' @importFrom XML newXMLNode
-svg_node <- function(name, parent, attrs=NULL, ...){
-  invisible(newXMLNode(name = name, parent = parent,
-             attrs=attrs, ...))
+#' @importFrom xml2 xml_add_child
+svg_node <- function(name, parent, ...){
+  invisible(xml_add_child(parent, name, ...))
 }
 
 #' @importFrom XML saveXML 
