@@ -26,7 +26,6 @@ svg <- function(object, ...){
 }
 
 #' @export
-#' @importFrom XML toString.XMLNode
 svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, pointsize = 12, version="1.1", preserveAspectRatio="xMinYMin meet", ...){
 
   svg <- init_svg(width, height, version = version, preserveAspectRatio = preserveAspectRatio,...)
