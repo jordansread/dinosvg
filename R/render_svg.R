@@ -48,6 +48,10 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
   
   par(old.par)
   write_svg(svg, file)
+  svg.text <- readChar(file, file.info(file)$size)
+  svg.text <- gsub(pattern = '&lt;', replacement = '<', svg.text)
+  svg.text <- gsub(pattern = '&gt;', replacement = '>', svg.text)
+  cat(svg.text, file = file)
   return(file)
 }
 
