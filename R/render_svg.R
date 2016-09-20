@@ -42,6 +42,9 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
     render_side(svg, object, side.name, width=width, height=height, pointsize=pointsize)
   }
   
+  # draw legend
+  # draw box
+  
   par(old.par)
   write_svg(svg, file)
   return(file)
