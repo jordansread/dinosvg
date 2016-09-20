@@ -8,7 +8,17 @@ init_svg <- function(width, height, ..., version="1.1"){
   svg <- xml_add_child(svg, 'svg')
   xml_attrs(svg) <- c("xmlns"="http://www.w3.org/2000/svg",'xmlns:xlink'="http://www.w3.org/1999/xlink",
                       viewBox=sprintf("0 0 %1.0f %1.0f", width*ppi, height*ppi), ...)
-  xml_add_child(svg, 'defs')
+  defs <- xml_add_child(svg, 'defs')
+  cdata <- "<![CDATA[
+    line, polyline, path, rect, circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  ]]>"
+  xml_add_child(defs, 'style', type='text/css', cdata)
   invisible(svg)
 }
 
