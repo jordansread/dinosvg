@@ -17,10 +17,10 @@ render_view <- function(svg, object, view.name, ...){
   
   xml_attr(clip.path, 'id') <- mask.id 
   xml_add_child(xml2::xml_find_first(svg, 'defs'), clip.path)
-  g.view <- xml_add_child(svg, 'g', id=as.svg_id (view.name))
+  g.view <- xml_add_child(svg, 'g', id=as.svg_id (view.name), 'clip-path'= sprintf("url(#%s)", mask.id))
   geoms <- xml2::xml_find_all(clip.path, '//defs/clipPath/parent::*[1]/following-sibling::*')
   lapply(geoms, function(x){
-      xml_attr(x, 'clip-path') <- sprintf("url(#%s)", mask.id)
+      xml_attr(x, 'clip-path') <- NULL
       xml_add_child(.x=g.view, x)
     })
   par(old.par)

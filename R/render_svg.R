@@ -38,9 +38,9 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
     render_view(svg, object, view.name, width=width, height=height, pointsize=pointsize)
   }
   
-  # for (side.name in gsplot:::side_names(object)){
-  #   render_side(svg, object, side.name)
-  # }
+  for (side.name in gsplot:::side_names(object)){
+    render_side(svg, object, side.name, width=width, height=height, pointsize=pointsize)
+  }
   
   par(old.par)
   write_svg(svg, file)
@@ -54,17 +54,6 @@ svg_id <- function(ele){
   xml_attr(ele,'id')
 }
 
-
-#' @importFrom xml2 xml_find_first
-xpath_one <- function(svg, xpath){
-  xml_find_first(svg, xpath)
-}
-
-
-#' @importFrom xml2 xml_add_child
-svg_node <- function(name, parent, ...){
-  invisible(xml_add_child(parent, name, ...))
-}
 
 #' @importFrom xml2 write_xml
 write_svg <- function(svg, file){
