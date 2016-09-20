@@ -19,13 +19,13 @@ create svg document from gsplot object
 library(gsplot)
 gs <- gsplot() \%>\% 
    points(y=1:11, x=1:11, 
-            col="blue", pch=18, xlab='pizza', ylab='dogs', 
-            id=paste0('point',1:11), 'fill-opacity'='0.3', 'stroke-opacity'=seq(0,1, length.out = 11)) \%>\% 
+            col="blue", pch=18, xlab='pizza', ylab='dogs', legend.name='thor') \%>\% 
    points(x=4:11, y=11:4, 
-            col="red", pch=1) \%>\% 
+            col="red", pch=1, legend.name='rabbit') \%>\% 
    points(3:5,4:6,side=c(1,4), col='green', pch=14, ylab='cats') \%>\% 
    lines(2:4, c(2,2.6,2.3), col='blue') \%>\% 
-   axis(side=1, at = c(3,6.5,8.6))
+   axis(side=1, at = c(3,6.5,8.6)) \%>\% 
+   legend()
 svg(gs)
 }
 }
