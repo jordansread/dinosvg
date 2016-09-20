@@ -1,5 +1,5 @@
 #' @export
-#' @importFrom xml2 xml_attr<-
+#' @importFrom xml2 xml_attr<- xml_find_all xml_find_first
 render_view <- function(svg, object, view.name, ...){
   view <- object[[view.name]]
   geoms <- view
@@ -11,46 +11,22 @@ render_view <- function(svg, object, view.name, ...){
     gsplot:::print.view(view)
   }, ...)
   clip.path <- xml2::xml_find_first(x, '//defs/clipPath')
-  xml_attr(clip.path, 'id') <- 'mask-1-2'
-  defs <- xml_add_child(svg, 'defs')
-  xml_add_child(defs, clip.path)
-  x.side <- gsplot:::as.x_side(view.name)
-  y.side <- gsplot:::as.y_side(view.name)
-  xlim <- xlim(object, side = x.side)
-  ylim <- ylim(object, side = y.side)
-  render_window(svg, view, side=c(x.side, y.side))
   
-  g.view <- g_view(svg, c(x.side, y.side))
-  g.axes <- g_axes(g.view)
-
-  # render_geoms(g.view, geoms, object, xlim, ylim)
+  
+  mask.id <- paste(c('mask', strsplit(view.name,'[.]')[[1]][2:3]), collapse ='-')
+  
+  xml_attr(clip.path, 'id') <- mask.id 
+  xml_add_child(xml2::xml_find_first(svg, 'defs'), clip.path)
+  g.view <- xml_add_child(svg, 'g', id=as.svg_id (view.name))
+  geoms <- xml2::xml_find_all(clip.path, '//defs/clipPath/parent::*[1]/following-sibling::*')
+  lapply(geoms, function(x){
+      xml_attr(x, 'clip-path') <- sprintf("url(#%s)", mask.id)
+      xml_add_child(.x=g.view, x)
+    })
   par(old.par)
+  invisible(svg)
 }
 
-#' @importFrom XML newXMLTextNode
-render_window <- function(svg, view, side){
-
-  ax <- svg_view_bounds(svg, mai=par()$mai, as.numeric=FALSE)
-
-  g.view <- svg_node('g', svg, 'id'=sprintf('view-%s-%s', side[1], side[2]))
-  g.mask <- svg_node('clipPath',svg_node('defs',g.view), id=sprintf('mask-%s-%s', side[1], side[2]))
-  svg_node('rect', g.mask, x=ax[['x']], y=ax[['y']], height=ax[['height']], width=ax[['width']])
-  g.axes <- svg_node('g', g.view, 'id'="axes", 'fill'="none", 'stroke'="#000000", 'stroke-width'="1")
-  
-  svg_node('rect', g.axes, x=ax[['x']], y=ax[['y']], height=ax[['height']], width=ax[['width']], id='axes-box')
-}
-
-render_geoms <- function(g.view, geoms, object, xlim, ylim){
-  
-  for (i in seq_len(length(geoms))){
-    fun_name <- paste0('render_',names(geoms[i]))
-    if (exists(fun_name)){
-      args <- append(list(g.view=g.view), geoms[[i]]) %>% 
-        append(list(xlim=xlim, ylim=ylim))
-      # hack! but removes duplicate formals (e.g., xlim specified both in window and the args for the function)
-      do.call(fun_name, args[unique(names(args))])
-    } else {
-      message(fun_name, " doesn't exist in ", packageName())
-    }
-  }
+as.svg_id <- function(x){
+  gsub('[.]','-', x)
 }

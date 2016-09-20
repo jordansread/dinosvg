@@ -27,9 +27,9 @@ svg <- function(object, ...){
 
 #' @export
 #' @importFrom XML toString.XMLNode
-svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, pointsize = 12, as.string=FALSE, as.xml=FALSE, ...){
+svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, pointsize = 12, version="1.1", preserveAspectRatio="xMinYMin meet", ...){
 
-  svg <- init_svg(width, height, ...)
+  svg <- init_svg(width, height, version = version, preserveAspectRatio = preserveAspectRatio,...)
   
   # can add gsplot dinosvg section to object before all this, would would contain shared components
   
@@ -38,16 +38,10 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
     render_view(svg, object, view.name, width=width, height=height, pointsize=pointsize)
   }
   
-  for (side.name in gsplot:::side_names(object)){
-    render_side(svg, object, side.name)
-  }
+  # for (side.name in gsplot:::side_names(object)){
+  #   render_side(svg, object, side.name)
+  # }
   
-  
-  if (as.string){
-    return(toString.XMLNode(svg))
-  } else if (as.xml){
-    return(svg)
-  }
   par(old.par)
   write_svg(svg, file)
   return(file)
