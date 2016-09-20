@@ -34,8 +34,9 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
   # can add gsplot dinosvg section to object before all this, would would contain shared components
   
   for (view.name in gsplot:::view_names(object)){
-    old.par <- par(par(object)) # set global par to object par
+    #old.par <- par(par(object)) # set global par to object par
     render_view(svg, object, view.name, width=width, height=height, pointsize=pointsize)
+    #par(old.par)
   }
   
   for (side.name in gsplot:::side_names(object)){
@@ -43,10 +44,12 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
   }
   
   render_legend(svg, object, width=width, height=height, pointsize=pointsize)
-  # draw legend
-  # draw box
   
-  par(old.par)
+  if (object$global$config$frame.plot){
+    render_box(svg, object, width=width, height=height, pointsize=pointsize)
+  }
+  
+  #par(old.par)
   write_svg(svg, file)
   svg.text <- readChar(file, file.info(file)$size)
   svg.text <- gsub(pattern = '&lt;', replacement = '<', svg.text)
