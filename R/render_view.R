@@ -12,7 +12,8 @@ render_view <- function(svg, object, view.name, ...){
   }, ...)
   clip.path <- xml2::xml_find_first(x, '//defs/clipPath')
   xml_attr(clip.path, 'id') <- 'mask-1-2'
-  xml_add_child(svg, clip.path)
+  defs <- xml_add_child(svg, 'defs')
+  xml_add_child(defs, clip.path)
   x.side <- gsplot:::as.x_side(view.name)
   y.side <- gsplot:::as.y_side(view.name)
   xlim <- xlim(object, side = x.side)
