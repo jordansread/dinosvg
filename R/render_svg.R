@@ -58,14 +58,6 @@ svg.gsplot <- function(object, file = "Rplot.svg", width = 6, height = 4.3, poin
   return(file)
 }
 
-
-
-#' @importFrom xml2 xml_attr
-svg_id <- function(ele){
-  xml_attr(ele,'id')
-}
-
-
 #' @importFrom xml2 write_xml
 write_svg <- function(svg, file){
   
