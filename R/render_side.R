@@ -11,7 +11,7 @@ render_side <- function(svg, object, side.name, ...){
       gsplot:::draw_axis(object, side.name)
     }
     if(par('ann')){
-      #mtext(text=gsplot:::label(object, side), side=side, line = 2, las=config("mtext")$las)
+      mtext(text=gsplot:::label(object, side), side=side, line = 2, las=config("mtext")$las)
     }
     par(old.par)
   }, ...)
