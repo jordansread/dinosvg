@@ -1,4 +1,5 @@
 #' @export
+#' @importFrom xml2 xml_attr<-
 render_view <- function(svg, object, view.name, ...){
   view <- object[[view.name]]
   geoms <- view
@@ -11,7 +12,7 @@ render_view <- function(svg, object, view.name, ...){
   }, ...)
   clip.path <- xml2::xml_find_first(x, '//defs/clipPath')
   xml_attr(clip.path, 'id') <- 'mask-1-2'
-  xml_add_child(svg, clip.path, id='newLCICOC')
+  xml_add_child(svg, clip.path)
   x.side <- gsplot:::as.x_side(view.name)
   y.side <- gsplot:::as.y_side(view.name)
   xlim <- xlim(object, side = x.side)
